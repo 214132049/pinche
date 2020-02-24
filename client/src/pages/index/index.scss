@@ -1,0 +1,44 @@
+.index {
+  flex-direction: column;
+  width: 100%;
+  .tools {
+    margin: 40px auto;
+    &-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      line-height: 1.2;
+      font-size: 24px;
+      image {
+        width: 60px;
+        height: 60px;
+        padding: 20px;
+        margin-bottom: 10px;
+        border-radius: 50%;
+      }
+    }
+    .at-col {
+      &:nth-child(1) {
+        image {
+          background-color: #f76d64;
+        }
+      }
+      &:nth-child(2) {
+        image {
+          background-color: #3dbafd;
+        }
+      }
+      &:nth-child(3) {
+        image {
+          background-color: #fc6639;
+        }
+      }
+      &:nth-child(4) {
+        image {
+          background-color: #fba81e;
+        }
+      }
+    }
+  }
+}
