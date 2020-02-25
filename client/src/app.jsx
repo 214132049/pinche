@@ -17,11 +17,13 @@ const store = configStore()
 
 class App extends Component {
 
+  componentDidMount () {}
+
   config = {
     pages: [
       'pages/index/index',
+      'pages/publish/index',
       'pages/mine/index',
-      'pages/publish/index'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -52,8 +54,6 @@ class App extends Component {
       }]
     },
   }
-
-  componentDidMount () {}
 
   componentDidShow () {}
 

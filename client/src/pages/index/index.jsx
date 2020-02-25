@@ -11,10 +11,6 @@ import './index.scss'
 
 class Index extends Component {
 
-  config = {
-    navigationBarTitleText: '周沪拼车',
-  }
-
   constructor(props) {
     super(props)
     this.state = {
@@ -32,6 +28,10 @@ class Index extends Component {
   }
 
   componentWillUnmount () { }
+
+  config = {
+    navigationBarTitleText: '周沪拼车',
+  }
 
   componentDidShow () { }
 

@@ -6,15 +6,15 @@ import './index.scss'
 
 class Index extends Component {
 
-  config = {
-    navigationBarTitleText: '周沪拼车'
-  }
-
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
   }
 
   componentWillUnmount () { }
+
+  config = {
+    navigationBarTitleText: '周沪拼车'
+  }
 
   componentDidShow () { }
 

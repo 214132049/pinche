@@ -1,0 +1,16 @@
+.form {
+  &-card {
+    &__title {
+      height: 80px;
+      line-height: 100px;
+      padding-left: 32px;
+      font-size: 28px;
+      background-color: #f5f5f5;
+      color: #999999;
+    }
+  }
+  .submit-btn {
+    padding: 0 5%;
+    margin-top: 40px;
+  }
+}
