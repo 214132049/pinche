@@ -24,14 +24,14 @@
   &__content {
     flex: 1;
     display: inline-block;
-    padding-right: 18px;
-    color: #333;
-    font-size: 32px;
-    line-height: 1.5;
     vertical-align: middle;
-    height: 44.8px;
+    color: $at-input-text-color;
+    padding-right: $spacing-v-md;
+    font-size: $at-input-font-size;
+    height: $at-input-font-size * 1.4;
+    line-height: $line-height-zh;
     &.placeholder {
-      color: #CCC;
+      color: $at-input-placeholder-color;
     }
   }
 }

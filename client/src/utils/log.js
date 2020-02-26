@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro'
 
 var log = Taro.getRealtimeLogManager ? Taro.getRealtimeLogManager() : null
 
-module.exports = {
+export default {
   info() {
     if (!log) return
     log.info.apply(log, arguments)

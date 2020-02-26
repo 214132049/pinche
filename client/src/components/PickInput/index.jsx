@@ -5,7 +5,9 @@ import './index.scss'
 
 class PickInput extends Component {
   defaultProps = {
-    placeholder: '请选择'
+    placeholder: '请选择',
+    title: '',
+    value: ''
   }
   
   constructor(props) {
