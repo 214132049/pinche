@@ -1,10 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Picker } from '@tarojs/components'
-import { AtButton, AtInput, AtRadio, AtTextarea, AtModal, AtModalContent, AtModalAction } from 'taro-ui'
+import { View, Text, Picker, Button } from '@tarojs/components'
+import { AtButton, AtInput, AtRadio, AtTextarea, AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
 import dayjs from 'dayjs'
 import { PickInput } from '@/components'
 
 import './index.scss'
+
+const chooseLocation = Taro.requirePlugin('chooseLocation');
 
 class Index extends Component {
 
@@ -14,10 +16,11 @@ class Index extends Component {
       sexSelector: [{key: '1', label: '男'}, {key: '0', label: '女'}],
       countSelector: ['1', '2', '3', '4', '5', '6'],
       isOpened: false,
+      currentCity: 'start',
       form: {
         type: '', // 信息类型
-        startCode: '', // 出发地
-        endCode: '', // 目的地
+        start: '', // 出发地
+        end: '', // 目的地
         date: dayjs().format('YYYY-MM-DD'),
         time: dayjs().format('HH:mm'),
         count: '',
@@ -38,13 +41,13 @@ class Index extends Component {
   }
 
   componentDidShow () { 
-    this.checkUserLocationAuth()
+    let location = chooseLocation.getLocation()
+    if (location) {
+      this.updateForm(this.state.currentCity, location.name)
+    }
   }
 
   componentDidHide () { }
-
-  onSubmit () {
-  }
 
   checkUserLocationAuth () {
     return Taro.getSetting().then(res => {
@@ -57,15 +60,44 @@ class Index extends Component {
     })
   }
 
-  async handleCityClick() {
+  onOpensetting(e) {
+    let authSetting = e.detail.authSetting
+    if (authSetting['scope.userLocation']) {
+      this.toLocationPlugin()
+      this.closeModal()
+    }
+  }
+  
+  async handleCityClick(prop) {
+    this.setState({
+      currentCity: prop
+    })
     const isAuth = await this.checkUserLocationAuth()
     console.log(isAuth)
     if (!isAuth) {
-      this.setState({
-        isOpened: true
-      })
+      this.openModal()
       return
     }
+    this.toLocationPlugin()
+  }
+
+  onGetPhoneNumber(e) {
+    console.log(e)
+  }
+
+  closeModal() {
+    this.setState({
+      isOpened: false
+    })
+  }
+
+  openModal() {
+    this.setState({
+      isOpened: true
+    })
+  }
+
+  toLocationPlugin () {
     const key = 'AW3BZ-CPGKP-IBDDS-VJWF5-6BMZS-YVBVJ'
     const referer = 'pinche'
     Taro.navigateTo({
@@ -85,11 +117,26 @@ class Index extends Component {
     if (prop === 'count') {
       value = this.state.countSelector[+value]
     }
+    this.updateForm(prop, value)
+    return value
+  }
+
+  updateForm (prop, value) {
     let form = { ...this.state.form, [prop]: value }
     this.setState({
       form
     })
-    return value
+  }
+
+  onSubmit() {
+    Taro.cloud.callFunction({
+      name: 'save_publish',
+      data: {
+        data: this.state.form
+      }
+    }).then(res => {
+      console.log(res)
+    })
   }
 
   render () {
@@ -119,25 +166,33 @@ class Index extends Component {
           </View>
           <View className='form-card__main'>
             <AtInput
-              name='startCode'
+              name='start'
               title='出发地'
               type='text'
-              editable={false}
               placeholder='请选择出发地'
-              value={form.startCode}
-              onClick={this.handleCityClick.bind(this)}
-              onChange={this.handleChange.bind(this, 'startCode')}
-            />
+              value={form.start}
+            >
+              <View
+                className='at-icon at-icon-map-pin'
+                onClick={this.handleCityClick.bind(this, 'start')}
+              >
+                <Text className='map-text'>地图选点</Text>
+              </View>
+            </AtInput>
             <AtInput
-              name='endCode'
+              name='end'
               title='目的地'
               type='text'
-              editable={false}
               placeholder='请选择目的地'
-              value={form.endCode}
-              onClick={this.handleCityClick.bind(this)}
-              onChange={this.handleChange.bind(this, 'endCode')}
-            />
+              value={form.end}
+            >
+              <View
+                className='at-icon at-icon-map-pin'
+                onClick={this.handleCityClick.bind(this, 'end')}
+              >
+                <Text className='map-text'>地图选点</Text>
+              </View>
+            </AtInput>
             <Picker
               mode='date'
               start={dayjs().format('YYYY-MM-DD')}
@@ -168,9 +223,9 @@ class Index extends Component {
               onChange={this.handleChange.bind(this, 'count')}
             >
               <PickInput
-                title='乘坐人数'
+                title='人数/空位'
                 value={countSelector[countSelected]}
-                placeholder='请选择乘坐人数'
+                placeholder='请选择人数/空位'
               ></PickInput>
             </Picker>
           </View>
@@ -210,7 +265,7 @@ class Index extends Component {
               placeholder='请输入手机号码'
               value={form.contactPhone}
               onChange={this.handleChange.bind(this, 'contactPhone')}
-            />
+            ></AtInput>
           </View>
         </View>
         <View className='form-card'>
@@ -227,16 +282,16 @@ class Index extends Component {
           </View>
         </View>
         <View className='submit-btn'>
-          <AtButton type='primary' formType='submit'>提交</AtButton>
+          <AtButton type='primary' onClick={this.onSubmit.bind(this)}>发 布</AtButton>
         </View>
         <AtModal isOpened={isOpened}>
+          <AtModalHeader>小程序需要获取你的地理位置</AtModalHeader>
           <AtModalContent>
             小程序获取你的位置信息，将用于出发地/目的地设置
           </AtModalContent>
           <AtModalAction>
-            <View className='modal-btn'>
-              <AtButton openType='openSetting'>确定</AtButton>
-            </View>
+            <Button onClick={this.closeModal.bind(this)}>取消</Button>
+            <Button openType='openSetting' onOpenSetting={this.onOpensetting.bind(this)}>确定</Button>
           </AtModalAction>
         </AtModal>
       </View>

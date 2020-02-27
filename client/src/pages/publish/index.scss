@@ -22,6 +22,10 @@
       .at-input--disabled {
         opacity: 1;
       }
+      .map-text {
+        font-size: $at-input-font-size;
+        padding: 0 4px;
+      }
     }
   }
   .submit-btn {
@@ -29,6 +33,8 @@
     margin-top: 60px;
   }
 }
-.modal-btn {
-  width: 100%;
+
+.at-modal__content {
+  min-height: auto;
+  text-align: center;
 }

@@ -7,12 +7,21 @@ cloud.init({
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext()
-
-  return {
-    event,
-    openid: wxContext.OPENID,
-    appid: wxContext.APPID,
-    unionid: wxContext.UNIONID,
+  try {
+    await cloud.database().collection('pinche_messages').add({
+      data: event.data
+    })
+    const result = await getResult({code: 200, errMsg: ''})
+    return result
+  } catch (error) {
+    const result = await getResult({ code: error.errorCode, errMsg: error.errMsg})
+    return result
   }
+}
+
+function getResult(data = {}) {
+  return cloud.callFunction({
+    name: 'common_result',
+    data
+  })
 }

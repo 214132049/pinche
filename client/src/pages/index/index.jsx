@@ -15,10 +15,10 @@ class Index extends Component {
     super(props)
     this.state = {
       tools: [
-        { title: '刷新', image: refresh },
-        { title: '发布', image: publish },
-        { title: '人找车', image: car },
-        { title: '车找人', image: people },
+        { key: 1, title: '刷新', image: refresh },
+        { key: 2, title: '发布', image: publish },
+        { key: 3, title: '人找车', image: car },
+        { key: 4, title: '车找人', image: people },
       ]
     }
   }
@@ -41,6 +41,14 @@ class Index extends Component {
     console.log('onGotoMore')
   }
 
+  onItemClick (item) {
+    if (item.key === 2) {
+      Taro.switchTab({
+        url: '/pages/publish/index'
+      })
+    }
+  }
+
   render () {
     const tools = this.state.tools
     return (
@@ -52,8 +60,8 @@ class Index extends Component {
           {
             tools.map(item => {
               return (
-                <View className='at-col' key={item.title}>
-                  <View className='tools-item'>
+                <View className='at-col' key={item.key}>
+                  <View className='tools-item' onClick={this.onItemClick.bind(this, item)}>
                     <Image src={item.image}></Image>
                     <Text>{item.title}</Text>
                   </View>

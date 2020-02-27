@@ -39,6 +39,7 @@ const config = {
     ]
   },
   defineConstants: {
+    NODE_ENV: process.env.NODE_ENV
   },
   mini: {
     postcss: {
