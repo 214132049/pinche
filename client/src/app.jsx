@@ -53,12 +53,6 @@ class App extends Component {
         text: '我的'
       }]
     },
-    plugins: {
-      chooseLocation: {
-        version: '1.0.2',
-        provider: "wx76a9a06e5b4e693e"
-      }
-    },
     permission: {
       'scope.userLocation': {
         desc: '小程序获取你的位置信息，将用于出发地/目的地设置'

@@ -1,6 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
-import { AtNoticebar } from 'taro-ui'
+import { View, Map } from '@tarojs/components'
 
 import './index.scss'
 
@@ -13,7 +12,8 @@ class Index extends Component {
   componentWillUnmount () { }
 
   config = {
-    navigationBarTitleText: '周沪拼车'
+    navigationBarTitleText: '周沪拼车',
+    navigationStyle: 'custom'
   }
 
   componentDidShow () { }
@@ -27,7 +27,7 @@ class Index extends Component {
   render () {
     return (
       <View className='index'>
-        我的
+        <Map></Map>
       </View>
     )
   }

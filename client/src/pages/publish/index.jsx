@@ -63,7 +63,7 @@ class Index extends Component {
   onOpensetting(e) {
     let authSetting = e.detail.authSetting
     if (authSetting['scope.userLocation']) {
-      this.toLocationPlugin()
+      this.openMap()
       this.closeModal()
     }
   }
@@ -78,7 +78,7 @@ class Index extends Component {
       this.openModal()
       return
     }
-    this.toLocationPlugin()
+    this.openMap()
   }
 
   onGetPhoneNumber(e) {
@@ -97,12 +97,8 @@ class Index extends Component {
     })
   }
 
-  toLocationPlugin () {
-    const key = 'AW3BZ-CPGKP-IBDDS-VJWF5-6BMZS-YVBVJ'
-    const referer = 'pinche'
-    Taro.navigateTo({
-      url: `plugin://chooseLocation/index?key=${key}&referer=${referer}`
-    })
+  openMap () {
+    Taro.chooseLocation()
   }
 
   handleChange (prop, e) {
