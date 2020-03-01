@@ -17,14 +17,13 @@ export default function Detail() {
     }
     return {
       title: '我发布一个拼车信息，快来一起出发吧！',
-      path: '/pages/detail/index?id=1234'
+      path: `/pages/detail/index?id=${router.params.id}`
     }
   })
 
   useEffect(() => {
     const getDetail = async () => {
       const id = router.params.id
-      console.log(id)
       try {
         const { data } = await Server({
           name: 'get_detail',

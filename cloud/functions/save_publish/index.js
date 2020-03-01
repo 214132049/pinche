@@ -74,6 +74,7 @@ exports.main = async (event, context) => {
         createtime: db.serverDate()
       }
     })
+    console.log(_id)
     const result = {code: 200, errMsg: '', id: _id}
     return result
   } catch (error) {
