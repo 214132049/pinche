@@ -1,19 +1,18 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Map } from '@tarojs/components'
+import { View } from '@tarojs/components'
+import { AtAvatar, AtList, AtListItem } from 'taro-ui'
 
 import './index.scss'
 
 class Index extends Component {
 
-  componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
+  componentDidMount () {
   }
 
   componentWillUnmount () { }
 
   config = {
-    navigationBarTitleText: '周沪拼车',
-    navigationStyle: 'custom'
+    navigationBarTitleText: '我的',
   }
 
   componentDidShow () { }
@@ -26,8 +25,17 @@ class Index extends Component {
 
   render () {
     return (
-      <View className='index'>
-        <Map></Map>
+      <View className='page'>
+        <View className='user-info'>
+          <AtAvatar circle openData={{ type: 'userAvatarUrl'}}></AtAvatar>
+          <View className='user-info--conent'>
+            <open-data type='userNickName'></open-data>
+          </View>
+        </View>
+        <AtList>
+          <AtListItem title='我的发布' arrow='right' />
+          <AtListItem title='意见反馈' arrow='right' />
+        </AtList>
       </View>
     )
   }

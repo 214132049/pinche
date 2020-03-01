@@ -1,12 +1,64 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Picker, Button } from '@tarojs/components'
+import { View, Text, Picker, Button, CheckboxGroup, Checkbox, Navigator } from '@tarojs/components'
 import { AtButton, AtInput, AtRadio, AtTextarea, AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
 import dayjs from 'dayjs'
+import schema from 'async-validator'
 import { PickInput } from '@/components'
+import Server from '@/utils/server'
 
 import './index.scss'
 
-const chooseLocation = Taro.requirePlugin('chooseLocation');
+const descriptor = {
+  type: {
+    required: true, message: '请选择拼车类型'
+  },
+  start: {
+    required: true, message: '请选择出发地', type: 'object',
+    validator: (rule, value) => !!value.name
+  },
+  end: {
+    required: true, message: '请选择目的地', type: 'object',
+    validator: (rule, value) => !!value.name
+  },
+  date: {
+    required: true, message: '请选择出发日期'
+  },
+  time: {
+    required: true, message: '请选择出发时间'
+  },
+  count: {
+    required: true, message: '请选择人数/空位'
+  },
+  price: {
+    pattern: /^([1-9]\d*|0)(\.\d{1,2})?$/, message: '金额不合法'
+  },
+  name: {
+    required: true, message: '请输入联系人姓名'
+  },
+  moblie: [
+    {required: true, message: '请输入联系人手机号'},
+    {pattern: /^1\d{10}$/,message: '手机号不正确'}
+  ],
+  agreement: {
+    required: true, message: '请阅读并同意《免责声明》', type: 'boolean',
+    validator: (rule, value) => value
+  }
+}
+
+const initForm = {
+  type: '', // 信息类型
+  start: {}, // 出发地
+  end: {}, // 目的地
+  date: dayjs().format('YYYY-MM-DD'),
+  time: dayjs().format('HH:mm'),
+  count: '',
+  price: '',
+  name: '',
+  sex: '1',
+  moblie: '',
+  note: '',
+  agreement: false
+}
 
 class Index extends Component {
 
@@ -16,22 +68,15 @@ class Index extends Component {
       sexSelector: [{key: '1', label: '男'}, {key: '0', label: '女'}],
       countSelector: ['1', '2', '3', '4', '5', '6'],
       isOpened: false,
+      checked: false,
       currentCity: 'start',
-      form: {
-        type: '', // 信息类型
-        start: '', // 出发地
-        end: '', // 目的地
-        date: dayjs().format('YYYY-MM-DD'),
-        time: dayjs().format('HH:mm'),
-        count: '',
-        contactName: '',
-        contactSex: '1',
-        contactPhone: ''
-      }
+      form: { ...initForm }
     }
+    this.formValidator = null
   }
 
   componentWillMount () {
+    this.formValidator = new schema(descriptor)
   }
 
   componentWillUnmount () { }
@@ -40,11 +85,7 @@ class Index extends Component {
     navigationBarTitleText: '发布拼车信息'
   }
 
-  componentDidShow () { 
-    let location = chooseLocation.getLocation()
-    if (location) {
-      this.updateForm(this.state.currentCity, location.name)
-    }
+  componentDidShow () {
   }
 
   componentDidHide () { }
@@ -68,21 +109,16 @@ class Index extends Component {
     }
   }
   
-  async handleCityClick(prop) {
+  async onCityClick(prop) {
     this.setState({
       currentCity: prop
     })
     const isAuth = await this.checkUserLocationAuth()
-    console.log(isAuth)
     if (!isAuth) {
       this.openModal()
       return
     }
     this.openMap()
-  }
-
-  onGetPhoneNumber(e) {
-    console.log(e)
   }
 
   closeModal() {
@@ -98,16 +134,18 @@ class Index extends Component {
   }
 
   openMap () {
-    Taro.chooseLocation()
+    Taro.chooseLocation().then(res => {
+      console.log(res)
+      this.updateForm(this.state.currentCity, res)
+    })
   }
 
-  handleChange (prop, e) {
-    console.log(prop, e)
+  onFieldChange (prop, e) {
     let value = e
     if (typeof value === 'object') {
       value = value.detail.value
     }
-    if (prop === 'contactSex') {
+    if (prop === 'sex') {
       value = this.state.sexSelector[+value].key
     }
     if (prop === 'count') {
@@ -124,20 +162,46 @@ class Index extends Component {
     })
   }
 
-  onSubmit() {
-    Taro.cloud.callFunction({
-      name: 'save_publish',
-      data: {
-        data: this.state.form
-      }
-    }).then(res => {
-      console.log(res)
+  onAgreementChange(e) {
+    console.log(e)
+    this.updateForm('agreement', !!e.detail.value[0])
+    this.setState({
+      checked: !!e.detail.value[0]
     })
   }
 
+  async onSubmit() {
+    console.log(JSON.stringify(this.state.form))
+    try {
+      await this.formValidator.validate(this.state.form)
+      const { id } = await Server({
+        name: 'save_publish',
+        data: this.state.form,
+        loadingTitle: '发布中...'
+      })
+      this.setState({
+        checked: false,
+        form: { ...initForm }
+      })
+      await Taro.showToast({
+        icon: 'success',
+        title: '发布成功'
+      })
+      Taro.navigateTo({
+        url: `/pages/detail/index?id=${id}`
+      })
+    } catch (e) {
+      const error = e.errors ? e.errors[0] : e
+      Taro.showToast({
+        icon: 'none',
+        title: error.message
+      })
+    }
+  }
+
   render () {
-    const { form, sexSelector, countSelector, isOpened }= this.state
-    let sexSelected = sexSelector.findIndex(v => v.key == form.contactSex)
+    const { form, sexSelector, countSelector, isOpened, checked }= this.state
+    let sexSelected = sexSelector.findIndex(v => v.key == form.sex)
     let countSelected = form.count - 1
     return (
       <View className='form'>
@@ -152,7 +216,7 @@ class Index extends Component {
                 { label: '车找人', value: '2' },
               ]}
               value={form.type}
-              onClick={this.handleChange.bind(this, 'type')}
+              onClick={this.onFieldChange.bind(this, 'type')}
             />
           </View>
         </View>
@@ -166,34 +230,24 @@ class Index extends Component {
               title='出发地'
               type='text'
               placeholder='请选择出发地'
-              value={form.start}
-            >
-              <View
-                className='at-icon at-icon-map-pin'
-                onClick={this.handleCityClick.bind(this, 'start')}
-              >
-                <Text className='map-text'>地图选点</Text>
-              </View>
-            </AtInput>
+              editable={false}
+              value={form.start.name}
+              onClick={this.onCityClick.bind(this, 'start')}
+            ></AtInput>
             <AtInput
               name='end'
               title='目的地'
               type='text'
               placeholder='请选择目的地'
-              value={form.end}
-            >
-              <View
-                className='at-icon at-icon-map-pin'
-                onClick={this.handleCityClick.bind(this, 'end')}
-              >
-                <Text className='map-text'>地图选点</Text>
-              </View>
-            </AtInput>
+              editable={false}
+              value={form.end.name}
+              onClick={this.onCityClick.bind(this, 'end')}
+            ></AtInput>
             <Picker
               mode='date'
               start={dayjs().format('YYYY-MM-DD')}
               value={form.date}
-              onChange={this.handleChange.bind(this, 'date')}
+              onChange={this.onFieldChange.bind(this, 'date')}
             >
               <PickInput
                 title='出发日期'
@@ -204,7 +258,7 @@ class Index extends Component {
             <Picker
               mode='time'
               value={form.time}
-              onChange={this.handleChange.bind(this, 'time')}
+              onChange={this.onFieldChange.bind(this, 'time')}
             >
               <PickInput
                 title='出发时间'
@@ -216,7 +270,7 @@ class Index extends Component {
               mode='selector'
               range={countSelector}
               value={Math.max(countSelected, 0)}
-              onChange={this.handleChange.bind(this, 'count')}
+              onChange={this.onFieldChange.bind(this, 'count')}
             >
               <PickInput
                 title='人数/空位'
@@ -224,6 +278,15 @@ class Index extends Component {
                 placeholder='请选择人数/空位'
               ></PickInput>
             </Picker>
+            <AtInput
+              name='price'
+              title='车费'
+              type='phone'
+              maxLength='11'
+              placeholder='请输入车费(选填)'
+              value={form.price}
+              onChange={this.onFieldChange.bind(this, 'price')}
+            ></AtInput>
           </View>
         </View>
         <View className='form-card'>
@@ -232,20 +295,20 @@ class Index extends Component {
           </View>
           <View className='form-card__main'>
             <AtInput
-              name='contactName'
+              name='name'
               title='姓名'
               type='text'
               maxLength='10'
               placeholder='请输入姓名'
-              value={form.contactName}
-              onChange={this.handleChange.bind(this, 'contactName')}
+              value={form.name}
+              onChange={this.onFieldChange.bind(this, 'name')}
             />
             <Picker
               mode='selector'
               range={sexSelector}
               rangeKey='label'
               value={sexSelected}
-              onChange={this.handleChange.bind(this, 'contactSex')}
+              onChange={this.onFieldChange.bind(this, 'sex')}
             >
               <PickInput
                 title='性别'
@@ -254,13 +317,13 @@ class Index extends Component {
               ></PickInput>
             </Picker>
             <AtInput
-              name='contactPhone'
+              name='moblie'
               title='手机号码'
               type='phone'
               maxLength='11'
               placeholder='请输入手机号码'
-              value={form.contactPhone}
-              onChange={this.handleChange.bind(this, 'contactPhone')}
+              value={form.moblie}
+              onChange={this.onFieldChange.bind(this, 'moblie')}
             ></AtInput>
           </View>
         </View>
@@ -271,11 +334,17 @@ class Index extends Component {
           <View className='form-card__main'>
             <AtTextarea
               value={form.note}
-              onChange={this.handleChange.bind(this, 'note')}
+              onChange={this.onFieldChange.bind(this, 'note')}
               maxLength={100}
-              placeholder='请输入备注信息'
+              placeholder='如携带宠物'
             />
           </View>
+        </View>
+        <View className='statement-box'>
+          <CheckboxGroup onChange={this.onAgreementChange.bind(this)}>
+            <Checkbox value='true' checked={checked} />发布前请阅读并同意
+            <Navigator url='/pages/statement/index'>《免责声明》</Navigator>
+          </CheckboxGroup>
         </View>
         <View className='submit-btn'>
           <AtButton type='primary' onClick={this.onSubmit.bind(this)}>发 布</AtButton>
@@ -283,7 +352,7 @@ class Index extends Component {
         <AtModal isOpened={isOpened}>
           <AtModalHeader>小程序需要获取你的地理位置</AtModalHeader>
           <AtModalContent>
-            小程序获取你的位置信息，将用于出发地/目的地设置
+            您的定位信息用于更精准的获取拼车起始地信息
           </AtModalContent>
           <AtModalAction>
             <Button onClick={this.closeModal.bind(this)}>取消</Button>

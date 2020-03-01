@@ -1,9 +1,12 @@
 import PickInput from './PickInput'
+import Card from './MessageCard'
 
 export {
-  PickInput
+  PickInput,
+  Card
 }
 
 export default {
-  PickInput
+  PickInput,
+  Card
 }

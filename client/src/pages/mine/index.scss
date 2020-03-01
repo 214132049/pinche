@@ -1,4 +1,11 @@
-page, .index, map {
-  width: 100vw;
-  height: 100vh;
+.page {
+  .user-info {
+    display: flex;
+    padding: 32px 50px;
+    background: #ffffff;
+    margin-bottom: 20px;
+    &--conent {
+      margin-left: 30px;
+    }
+  }
 }

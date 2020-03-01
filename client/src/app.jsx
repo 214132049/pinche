@@ -1,6 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
-
 import Index from './pages/index'
 
 import configStore from './store'
@@ -24,6 +23,8 @@ class App extends Component {
       'pages/index/index',
       'pages/publish/index',
       'pages/mine/index',
+      'pages/statement/index',
+      'pages/detail/index'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -38,24 +39,24 @@ class App extends Component {
       backgroundColor: '#ffffff',
       list: [{
         pagePath: 'pages/index/index',
-        iconPath: './images/icon_home.png',
-        selectedIconPath: './images/icon_home_HL.png',
+        iconPath: './assets/images/icon_home.png',
+        selectedIconPath: './assets/images/icon_home_HL.png',
         text: '首页'
       }, {
         pagePath: 'pages/publish/index',
-        iconPath: './images/icon_publish.png',
-        selectedIconPath: './images/icon_publish_HL.png',
+        iconPath: './assets/images/icon_publish.png',
+        selectedIconPath: './assets/images/icon_publish_HL.png',
         text: '发布'
       }, {
         pagePath: 'pages/mine/index',
-        iconPath: './images/icon_mine.png',
-        selectedIconPath: './images/icon_mine_HL.png',
+        iconPath: './assets/images/icon_mine.png',
+        selectedIconPath: './assets/images/icon_mine_HL.png',
         text: '我的'
       }]
     },
     permission: {
       'scope.userLocation': {
-        desc: '小程序获取你的位置信息，将用于出发地/目的地设置'
+        desc: '您的定位信息用于更精准的获取拼车起始地信息'
       }
     }
   }

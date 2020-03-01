@@ -1,0 +1,107 @@
+@import "~taro-ui/dist/style/variables/default.scss";
+@import "~taro-ui/dist/style/mixins/libs/hairline.scss";
+
+.info {
+  position: relative;
+  box-sizing: border-box;
+  width: 94%;
+  padding: 20px 24px;
+  background: #ffffff;
+  margin: 30px auto;
+  border-radius: 16px;
+  box-shadow: 2px 2px 10px #eee;
+  font-size: 32px;
+  overflow: hidden;
+  &-tag {
+    position: absolute;
+    right: -64px;
+    top: 24px;
+    width: 200px;
+    height: 36px;
+    text-align: center;
+    line-height: 36px;
+    background: #fe4e4e;
+    color: #ffffff;
+    transform: rotateZ(45deg);
+    font-size: 24px;
+  }
+  &-city {
+    @include hairline-bottom();
+    padding-bottom: 20px;
+    &--item {
+      display: flex;
+      align-items: center;
+      &:last-of-type {
+        margin-top: 10px;
+      }
+      .label {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        font-size: 24px;
+        line-height: 36px;
+        text-align: center;
+        margin-right: 24px;
+        color: #fff;
+        border-radius: 50%;
+        &.start {
+          background: #40d09f;
+        }
+        &.end {
+          background: #fe4e4e;
+        }
+      }
+    }
+    .line {
+      width: 4px;
+      height: 20px;
+      margin:6px 0 6px 14px;
+      background: url('~@/assets/images/circle-line.png') center no-repeat;
+      background-size: 100%;
+    }
+  }
+  .info-detail {
+    padding: 20px 0;
+    line-height: 48px;
+    &--main {
+      display: flex;
+      justify-content: space-between;
+      .text {
+        display: block;
+      }
+      .label {
+        color: #999999;
+        font-size: 28px;
+      }
+      &__left {
+        .value {
+          color: #267aea;
+        }
+      }
+      &__right {
+        text-align: right;
+        .value {
+          color: #fab600;
+        }
+      }
+    }
+    &--extra {
+      color: #999999;
+      font-size: 28px;
+      .label {
+        margin-right: 20px;
+      }
+    }
+  }
+    
+  .info-user {
+    @include hairline-top();
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    .name {
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+  }
+}

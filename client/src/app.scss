@@ -15,3 +15,39 @@
 @import "~taro-ui/dist/style/components/radio.scss";
 @import "~taro-ui/dist/style/components/list.scss";
 @import "~taro-ui/dist/style/components/modal.scss";
+@import "~taro-ui/dist/style/components/activity-indicator.scss";
+@import "~taro-ui/dist/style/components/divider.scss";
+
+page {
+  background: #f5f5f5;
+}
+
+@font-face {
+  font-family: 'iconfont';
+  src: url('~@/assets/font/iconfont.eot');
+  src: url('~@/assets/font/iconfont.eot?#iefix') format('embedded-opentype'),
+      url('~@/assets/font/iconfont.woff2') format('woff2'),
+      url('~@/assets/font/iconfont.woff') format('woff'),
+      url('~@/assets/font/iconfont.ttf') format('truetype'),
+      url('~@/assets/font/iconfont.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.iconfont-woman:before {
+  content: "\e60c";
+}
+
+.iconfont-man:before {
+  content: "\e60d";
+}
+
+.iconfont-arrow:before {
+  content: "\e623";
+}

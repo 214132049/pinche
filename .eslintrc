@@ -1,8 +1,13 @@
 {
   "parser": "babel-eslint",
   "extends": ["taro"],
+  "plugins": [
+    "react-hooks"
+  ],
   "rules": {
     "no-unused-vars": ["error", { "varsIgnorePattern": "Taro" }],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

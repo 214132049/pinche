@@ -1,0 +1,24 @@
+.detail {
+  &-main {
+    background: #42bffe;
+    padding: 40px;
+    color: #ffffff;
+    &__header {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      align-items: center;
+      .arrow {
+        width: 160px;
+        height: 40px;
+      }
+      .name {
+        flex: 1;
+      }
+    }
+    &__body {
+      text-align: center;
+      margin-top: 50px;
+    }
+  }
+}
