@@ -9,6 +9,7 @@ cloud.init({
 exports.main = async (event, context) => {
   const param = event.data
   try {
+    const { OPENID } = cloud.getWXContext()
     // get data
     const db = cloud.database()
     const collection = db.collection('pinche_messages')
@@ -23,7 +24,7 @@ exports.main = async (event, context) => {
       filter.end = param.end
     }
     if (param.ismine) {
-      filter.openid = param.openid
+      filter.openid = OPENID
     }
     const pagesize = param.pagesize || 10 // 每页查询多少条，默认10条
     const pageno = param.pageno || 1 // 当前第几页，默认第一页

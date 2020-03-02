@@ -19,8 +19,10 @@ class Index extends Component {
 
   componentDidHide () { }
 
-  onGotoMore () {
-    console.log('onGotoMore')
+  toMinePublish () {
+    Taro.navigateTo({
+      url: '/pages/mine_publish/index'
+    })
   }
 
   render () {
@@ -28,12 +30,10 @@ class Index extends Component {
       <View className='page'>
         <View className='user-info'>
           <AtAvatar circle openData={{ type: 'userAvatarUrl'}}></AtAvatar>
-          <View className='user-info--conent'>
-            <open-data type='userNickName'></open-data>
-          </View>
+          <open-data type='userNickName'></open-data>
         </View>
         <AtList>
-          <AtListItem title='我的发布' arrow='right' />
+          <AtListItem title='我的发布' arrow='right' onClick={this.toMinePublish.bind(this)} />
           <AtListItem title='意见反馈' arrow='right' />
         </AtList>
       </View>

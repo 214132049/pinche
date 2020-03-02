@@ -1,11 +1,14 @@
 .page {
   .user-info {
     display: flex;
-    padding: 32px 50px;
-    background: #ffffff;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 32px 0;
+    background: #fcdf1a;
     margin-bottom: 20px;
-    &--conent {
-      margin-left: 30px;
+    .at-avatar {
+      margin-bottom: 20px;
     }
   }
 }

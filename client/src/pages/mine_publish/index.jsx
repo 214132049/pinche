@@ -1,12 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Text, Navigator } from '@tarojs/components'
-import { AtNoticebar, AtActivityIndicator, AtDivider } from 'taro-ui'
-import refresh from '@/assets/images/refresh.png'
+import { View, Image, Text } from '@tarojs/components'
+import { AtActivityIndicator, AtDivider } from 'taro-ui'
+import { Card } from '@/components'
+import Server from '@/utils/server'
 import car from '@/assets/images/car.png'
 import publish from '@/assets/images/publish.png'
 import people from '@/assets/images/people.png'
-import Server from '@/utils/server'
-import { Card } from '@/components'
 
 import './index.scss'
 
@@ -17,8 +16,6 @@ class Index extends Component {
     super(props)
     this.state = {
       tools: [
-        { key: 1, title: '刷新', image: refresh },
-        { key: 2, title: '发布', image: publish },
         { key: 3, title: '人找车', image: car },
         { key: 4, title: '车找人', image: people },
       ],
@@ -36,7 +33,7 @@ class Index extends Component {
   }
 
   config = {
-    navigationBarTitleText: 'e拼车',
+    navigationBarTitleText: '我的发布',
     onReachBottomDistance: 100,
     enablePullDownRefresh: true
   }
@@ -71,7 +68,8 @@ class Index extends Component {
         data: {
           pagesize,
           pageno,
-          type
+          type,
+          ismine: true
         },
         noloading: true
       })
@@ -93,15 +91,22 @@ class Index extends Component {
     }
   }
 
+  toDetail(id) {
+    Taro.navigateTo({
+      url: `/pages/detail/index?id=${id}`
+    })
+  }
+
+  toPublish() {
+    Taro.switchTab({
+      url: '/pages/publish/index'
+    })
+  }
+
   onItemClick (item) {
     switch(item.key) {
-      case 1:
-        this.refreshList('')
-        break
       case 2:
-        Taro.switchTab({
-          url: '/pages/publish/index'
-        })
+        this.toPublish()
         break
       case 3:
       case 4:
@@ -111,12 +116,6 @@ class Index extends Component {
       default: 
         break
     }
-  }
-
-  toDetail(id) {
-    Taro.navigateTo({
-      url: `/pages/detail/index?id=${id}`
-    })
   }
 
   refreshList(type) {
@@ -133,9 +132,6 @@ class Index extends Component {
     return (
       <View className='page'>
         <View className='page-header'>
-          <AtNoticebar single marquee icon='volume-plus' speed={80}>
-            <Navigator url='/pages/statement/index'>平台公告: 本平台只帮助各方老乡发布信息，不负责信息的真实性，点击查看公告详情。</Navigator>
-          </AtNoticebar>
           <View className='at-row at-row__justify--around tools'>
             {
               tools.map(item => {
@@ -163,6 +159,10 @@ class Index extends Component {
           {
             loadend ? <AtDivider className='divider' fontColor='#ccc' content='我是有底线的'></AtDivider> : ''
           }
+        </View>
+        <View className='fab-btn' onClick={this.toPublish.bind(this)}>
+          <Image src={publish}></Image>
+          <Text>发布</Text>
         </View>
       </View>
     )

@@ -24,7 +24,8 @@ class App extends Component {
       'pages/publish/index',
       'pages/mine/index',
       'pages/statement/index',
-      'pages/detail/index'
+      'pages/detail/index',
+      'pages/mine_publish/index'
     ],
     window: {
       backgroundTextStyle: 'dark',
@@ -35,7 +36,7 @@ class App extends Component {
     tabBar: {
       custom: false,
       color: '#333333',
-      selectedColor: '#fcdf1a',
+      selectedColor: '#333333',
       backgroundColor: '#ffffff',
       list: [{
         pagePath: 'pages/index/index',
