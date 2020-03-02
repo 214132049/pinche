@@ -22,7 +22,6 @@ class Index extends Component {
         { key: 3, title: '人找车', image: car },
         { key: 4, title: '车找人', image: people },
       ],
-      scrollViewHeight: 200,
       list: [],
       pagesize: 10,
       pageno: 1,
@@ -34,20 +33,26 @@ class Index extends Component {
 
   async componentDidMount () {
     this.onGetPublishMessage()
-    const res = await Taro.getSystemInfoSync()
-    this.setState({
-      scrollViewHeight: res.windowHeight
-    })
   }
 
   config = {
     navigationBarTitleText: 'e拼车',
+    onReachBottomDistance: 100,
+    enablePullDownRefresh: true
   }
 
   componentDidShow () {
   }
 
   componentDidHide () { }
+
+  onPullDownRefresh() {
+    this.refreshList('')
+  }
+
+  onReachBottom() {
+    this.onGetPublishMessage()
+  }
 
   async onGetPublishMessage() {
     let { loading, list, pageno, pagesize, type, loadend } = this.state
@@ -123,50 +128,42 @@ class Index extends Component {
   }
 
   render () {
-    const { tools, scrollViewHeight, list, loading, loadend } = this.state
+    const { tools, list, loading, loadend } = this.state
     return (
-      <ScrollView
-        scrollY
-        scrollWithAnimation
-        enableBackToTop
-        style={{height: `${scrollViewHeight}px`, position: 'relative'}}
-        onScrollToLower={this.onGetPublishMessage.bind(this)}
-      >
-        <View className='page'>
-          <View className='page-header'>
-            <AtNoticebar single marquee icon='volume-plus' speed={80}>
-              <Navigator url='/pages/statement/index'>平台公告: 本平台只帮助各方老乡发布信息，不负责信息的真实性，点击查看公告详情。</Navigator>
-            </AtNoticebar>
-            <View className='at-row at-row__justify--around tools'>
-              {
-                tools.map(item => {
-                  return (
-                    <View className='at-col' key={item.key}>
-                      <View className='tools-item' onClick={this.onItemClick.bind(this, item)}>
-                        <Image src={item.image}></Image>
-                        <Text>{item.title}</Text>
-                      </View>
+      <View className='page'>
+        <View className='page-header'>
+          <AtNoticebar single marquee icon='volume-plus' speed={80}>
+            <Navigator url='/pages/statement/index'>平台公告: 本平台只帮助各方老乡发布信息，不负责信息的真实性，点击查看公告详情。</Navigator>
+          </AtNoticebar>
+          <View className='at-row at-row__justify--around tools'>
+            {
+              tools.map(item => {
+                return (
+                  <View className='at-col' key={item.key}>
+                    <View className='tools-item' onClick={this.onItemClick.bind(this, item)}>
+                      <Image src={item.image}></Image>
+                      <Text>{item.title}</Text>
                     </View>
-                  )
-                })
-              }
-            </View>
-          </View>
-          <View className='page-body'>
-            {
-              list.map(item => {
-                return <Card key={item._id} info={item} onClick={this.toDetail.bind(this, item._id)}></Card>
+                  </View>
+                )
               })
-            }
-            {
-              loading ? <AtActivityIndicator mode='center' content='加载中...'></AtActivityIndicator> : ''
-            }
-            {
-              loadend ? <AtDivider className='divider' fontColor='#ccc' content='我是有底线的'></AtDivider> : ''
             }
           </View>
         </View>
-      </ScrollView>
+        <View className='page-body'>
+          {
+            list.map(item => {
+              return <Card key={item._id} info={item} onClick={this.toDetail.bind(this, item._id)}></Card>
+            })
+          }
+          {
+            loading ? <AtActivityIndicator mode='center' content='加载中...'></AtActivityIndicator> : ''
+          }
+          {
+            loadend ? <AtDivider className='divider' fontColor='#ccc' content='我是有底线的'></AtDivider> : ''
+          }
+        </View>
+      </View>
     )
   }
 }

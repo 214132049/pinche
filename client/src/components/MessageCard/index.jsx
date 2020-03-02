@@ -54,14 +54,14 @@ export default function MessageCard({ info = {}, onClick = noop }) {
     dateDes = dayjs(info.date).format('MM-DD')
   }
 
-  console.log(dateDes)
   function handleClick () {
+    console.log(12)
     if (expired) return
     onClick()
   }
 
   return (
-    <View className={expired ? 'info expired' : 'info'} onClick={() => handleClick()}>
+    <View className={expired ? 'info expired' : 'info'} onClick={handleClick}>
       <View className='info-tag' style={{backgroundColor: type.color}}>{type.label}</View>
       <View className='info-city'>
         <View className='info-city--item'>

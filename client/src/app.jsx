@@ -27,15 +27,15 @@ class App extends Component {
       'pages/detail/index'
     ],
     window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#42bffe',
+      backgroundTextStyle: 'dark',
+      navigationBarBackgroundColor: '#fcdf1a',
       navigationBarTitleText: '周沪拼车',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'black'
     },
     tabBar: {
       custom: false,
       color: '#333333',
-      selectedColor: '#42bffe',
+      selectedColor: '#fcdf1a',
       backgroundColor: '#ffffff',
       list: [{
         pagePath: 'pages/index/index',
