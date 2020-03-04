@@ -13,7 +13,9 @@ exports.main = async (event, context) => {
     // get data
     const db = cloud.database()
     const collection = db.collection('pinche_messages')
-    const filter = {} // 搜索条件
+    const filter = {
+      valid: true
+    } // 搜索条件
     if (param.type) {
       filter.type = param.type
     }

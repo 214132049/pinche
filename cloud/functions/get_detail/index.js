@@ -17,7 +17,8 @@ exports.main = async (event, context) => {
       throw new Error('缺少参数id')
     }
     const { data } = await collection.where({
-      _id: param.id
+      _id: param.id,
+      valid: true
     }).get()
     if (data.length !== 1) {
       throw new Error('没有查到')

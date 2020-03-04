@@ -1,0 +1,33 @@
+.page {
+  background: #ffffff;
+  padding: 20px 0;
+  .tools {
+    &-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 32px;
+      border-radius: 20px;
+      margin: 0 50px;
+      height: 80px;
+      color: #ffffff;
+      image {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+      }
+    }
+    .at-col {
+      &:nth-child(1) {
+        .tools-item {
+          background-color: #ff411e;
+        }
+      }
+      &:nth-child(2) {
+        .tools-item {
+          background-color: #fba81e;
+        }
+      }
+    }
+  }
+}

@@ -21,8 +21,9 @@ class App extends Component {
   config = {
     pages: [
       'pages/index/index',
-      'pages/publish/index',
+      'pages/publish_type/index',
       'pages/mine/index',
+      'pages/publish/index',
       'pages/statement/index',
       'pages/detail/index',
       'pages/mine_publish/index'
@@ -44,7 +45,7 @@ class App extends Component {
         selectedIconPath: './assets/images/icon_home_HL.png',
         text: '首页'
       }, {
-        pagePath: 'pages/publish/index',
+        pagePath: 'pages/publish_type/index',
         iconPath: './assets/images/icon_publish.png',
         selectedIconPath: './assets/images/icon_publish_HL.png',
         text: '发布'

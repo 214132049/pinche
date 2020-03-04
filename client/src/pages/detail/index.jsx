@@ -1,13 +1,21 @@
 import Taro, { useShareAppMessage, useEffect, useState, useRouter } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
-import { AtButton, AtIcon } from 'taro-ui'
+import { View, Text, Image, Button } from '@tarojs/components'
+import { AtDivider, AtIcon } from 'taro-ui'
 import Server from '@/utils/server'
+import dayjs from 'dayjs'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+
+import weixin from '@/assets/images/weixin.png'
+import miniCode from '@/assets/images/mini_code.png'
 
 import './index.scss'
+
+dayjs.extend(isSameOrAfter)
 
 export default function Detail() {
 
   const [detail = {}, setDetail] = useState({})
+  const [expired = false, setExpired] = useState({})
   const router = useRouter()
 
   useShareAppMessage(res => {
@@ -32,7 +40,9 @@ export default function Detail() {
           },
           noloading: true
         })
+        const _expired =  dayjs().isSameOrAfter(`${data.date} ${data.time}`, 'minute')
         setDetail(data)
+        setExpired(_expired)
       } catch (error) {
         Taro.showToast({
           icon: 'none',
@@ -44,12 +54,12 @@ export default function Detail() {
   }, [router.params.id])
 
   return (
-    <View className='detail'>
+    <View className={expired ? 'detail expired' : 'detail'}>
       <View className='detail-main'>
         <View className='detail-main__header'>
           <Text className='name'>{detail.start.name}</Text>
           <View className='arrow'>
-            <AtIcon prefixClass='iconfont' value='arrow' size='24' color='#fff'></AtIcon>
+            <AtIcon prefixClass='iconfont' value='arrow' size='24' color='#333333'></AtIcon>
           </View>
           <Text className='name'>{detail.end.name}</Text>
         </View>
@@ -58,7 +68,15 @@ export default function Detail() {
           <View>{detail.date}</View>
         </View>
       </View>
-      <AtButton openType='share'>分享给朋友</AtButton>
+      <AtDivider className='divider' fontColor='#ccc' content='快分享给朋友吧'></AtDivider>
+      <View className='share-btns'>
+        <Button openType='share'>
+          <Image src={weixin}></Image>
+        </Button>
+        <Button>
+          <Image src={miniCode}></Image>
+        </Button>
+      </View>
     </View>
   )
 }

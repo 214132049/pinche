@@ -24,8 +24,18 @@ const descriptor = {
   time: {
     required: true, message: '出发时间不能为空'
   },
-  count: {
-    required: true, message: '人数/空位不能为空'
+  cartype (rule, value, callback, source) {
+    if (source.type == '2' && !value) {
+      return callback(new Error('车型不能为空'))
+    }
+    callback()
+  },
+  count (rule, value, callback, source) {
+    let findPeople = source.type == '2'
+    if (!value) {
+      return callback(new Error(findPeople ? '空位数不能为空' : '乘坐人数不能为空'))
+    }
+    callback()
   },
   name: {
     required: true, message: '联系人姓名不能为空'
@@ -35,7 +45,7 @@ const descriptor = {
     {pattern: /^1\d{10}$/,message: '手机号不正确'}
   ],
   agreement: {
-    required: true, message: '须同意《免责声明》', type: 'boolean',
+    required: true, message: '须同意《服务协议》', type: 'boolean',
     validator: (rule, value) => value
   }
 }
@@ -59,10 +69,12 @@ exports.main = async (event, context) => {
     })
     data.top = false // 置顶
     data.valid = true // 是否有效
+    data.departureTime = new Date(`${data.date} ${data.time}`) // 出发时间
+
     data.openid = wxContext.OPENID
     data.appid = wxContext.APPID
     data.unionid = wxContext.UNIONID
-    
+
     delete data.start.errMsg
     delete data.end.errMsg
 
@@ -74,7 +86,6 @@ exports.main = async (event, context) => {
         createtime: db.serverDate()
       }
     })
-    console.log(_id)
     const result = {code: 200, errMsg: '', id: _id}
     return result
   } catch (error) {

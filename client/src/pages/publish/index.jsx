@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Picker, Button, CheckboxGroup, Checkbox, Navigator } from '@tarojs/components'
-import { AtButton, AtInput, AtRadio, AtTextarea, AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
+import { AtButton, AtInput, AtTextarea, AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
 import dayjs from 'dayjs'
 import schema from 'async-validator'
 import { PickInput } from '@/components'
@@ -26,14 +26,27 @@ const descriptor = {
   time: {
     required: true, message: '请选择出发时间'
   },
-  count: {
-    required: true, message: '请选择人数/空位'
+  cartype (rule, value, callback, source) {
+    if (source.type == '2' && !value) {
+      return callback(new Error('请选择车型'))
+    }
+    callback()
+  },
+  count (rule, value, callback, source) {
+    let findPeople = source.type == '2'
+    if (!value) {
+      return callback(new Error(findPeople ? '请选择空位数' : '请选择乘坐人数'))
+    }
+    callback()
   },
   price: {
-    pattern: /^([1-9]\d*|0)(\.\d{1,2})?$/, message: '金额不合法'
+    pattern: /^[1-9]\d*$/, message: '请填写整数金额'
   },
   name: {
     required: true, message: '请输入联系人姓名'
+  },
+  sex: {
+    required: true, message: '请选择性别'
   },
   moblie: [
     {required: true, message: '请输入联系人手机号'},
@@ -51,10 +64,11 @@ const initForm = {
   end: {}, // 目的地
   date: dayjs().format('YYYY-MM-DD'),
   time: dayjs().format('HH:mm'),
+  cartype: '',
   count: '',
   price: '',
   name: '',
-  sex: '1',
+  sex: '',
   moblie: '',
   note: '',
   agreement: false
@@ -66,6 +80,12 @@ class Index extends Component {
     super(props)
     this.state = {
       sexSelector: [{key: '1', label: '男'}, {key: '0', label: '女'}],
+      carSelector: [
+        {key: '1', label: '轿车'},
+        {key: '2', label: 'SUV'},
+        {key: '3', label: 'MPV'},
+        {key: '4', label: '其他'}
+      ],
       countSelector: ['1', '2', '3', '4', '5', '6'],
       isOpened: false,
       checked: false,
@@ -75,14 +95,19 @@ class Index extends Component {
     this.formValidator = null
   }
 
-  componentWillMount () {
+  componentDidMount () {
+    let { type, id } = this.$router.params
     this.formValidator = new schema(descriptor)
+    this.updateForm('type', type)
+    if (id) {
+      console.log('edit')
+    }
   }
 
   componentWillUnmount () { }
 
   config = {
-    navigationBarTitleText: '发布拼车信息'
+    navigationBarTitleText: '拼车信息'
   }
 
   componentDidShow () {
@@ -135,7 +160,6 @@ class Index extends Component {
 
   openMap () {
     Taro.chooseLocation().then(res => {
-      console.log(res)
       this.updateForm(this.state.currentCity, res)
     })
   }
@@ -147,6 +171,9 @@ class Index extends Component {
     }
     if (prop === 'sex') {
       value = this.state.sexSelector[+value].key
+    }
+    if (prop === 'cartype') {
+      value = this.state.carSelector[+value].key
     }
     if (prop === 'count') {
       value = this.state.countSelector[+value]
@@ -163,7 +190,6 @@ class Index extends Component {
   }
 
   onAgreementChange(e) {
-    console.log(e)
     this.updateForm('agreement', !!e.detail.value[0])
     this.setState({
       checked: !!e.detail.value[0]
@@ -171,7 +197,6 @@ class Index extends Component {
   }
 
   async onSubmit() {
-    console.log(JSON.stringify(this.state.form))
     try {
       await this.formValidator.validate(this.state.form)
       const { id } = await Server({
@@ -200,12 +225,14 @@ class Index extends Component {
   }
 
   render () {
-    const { form, sexSelector, countSelector, isOpened, checked }= this.state
+    const { form, sexSelector, carSelector, countSelector, isOpened, checked }= this.state
     let sexSelected = sexSelector.findIndex(v => v.key == form.sex)
+    let carSelected = carSelector.findIndex(v => v.key == form.cartype)
     let countSelected = form.count - 1
+    let findPeople = form.type == '2'
     return (
       <View className='form'>
-        <View className='form-card'>
+        {/* <View className='form-card'>
           <View className='form-card__title'>
             <Text>拼车类型</Text>
           </View>
@@ -219,7 +246,7 @@ class Index extends Component {
               onClick={this.onFieldChange.bind(this, 'type')}
             />
           </View>
-        </View>
+        </View> */}
         <View className='form-card'>
           <View className='form-card__title'>
             <Text>拼车信息</Text>
@@ -266,6 +293,23 @@ class Index extends Component {
                 placeholder='请选择出发时间'
               ></PickInput>
             </Picker>
+            {
+              findPeople ?
+              <Picker
+                mode='selector'
+                range={carSelector}
+                rangeKey='label'
+                value={Math.max(carSelected, 0)}
+                onChange={this.onFieldChange.bind(this, 'cartype')}
+              >
+                <PickInput
+                  title='车型'
+                  value={carSelector[carSelected] ? carSelector[carSelected].label : ''}
+                  placeholder='请选择车型'
+                ></PickInput>
+              </Picker> : ''
+            }
+            
             <Picker
               mode='selector'
               range={countSelector}
@@ -273,9 +317,9 @@ class Index extends Component {
               onChange={this.onFieldChange.bind(this, 'count')}
             >
               <PickInput
-                title='人数/空位'
+                title={findPeople ? '空位数' : '乘坐人数'}
                 value={countSelector[countSelected]}
-                placeholder='请选择人数/空位'
+                placeholder={findPeople ? '请选择空位数' : '请选择乘坐人数'}
               ></PickInput>
             </Picker>
             <AtInput
@@ -307,12 +351,12 @@ class Index extends Component {
               mode='selector'
               range={sexSelector}
               rangeKey='label'
-              value={sexSelected}
+              value={Math.max(sexSelected, 0)}
               onChange={this.onFieldChange.bind(this, 'sex')}
             >
               <PickInput
                 title='性别'
-                value={sexSelector[sexSelected].label}
+                value={sexSelector[sexSelected] ? sexSelector[sexSelected].label : ''}
                 placeholder='请选择性别'
               ></PickInput>
             </Picker>
@@ -343,7 +387,7 @@ class Index extends Component {
         <View className='statement-box'>
           <CheckboxGroup onChange={this.onAgreementChange.bind(this)}>
             <Checkbox value='true' checked={checked} />发布前请阅读并同意
-            <Navigator url='/pages/statement/index'>《免责声明》</Navigator>
+            <Navigator url='/pages/statement/index'>《服务协议》</Navigator>
           </CheckboxGroup>
         </View>
         <View className='submit-btn'>

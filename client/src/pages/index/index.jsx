@@ -113,7 +113,7 @@ class Index extends Component {
     }
   }
 
-  toDetail(id) {
+  onToDetail(id) {
     Taro.navigateTo({
       url: `/pages/detail/index?id=${id}`
     })
@@ -133,9 +133,11 @@ class Index extends Component {
     return (
       <View className='page'>
         <View className='page-header'>
-          <AtNoticebar single marquee icon='volume-plus' speed={80}>
-            <Navigator url='/pages/statement/index'>平台公告: 本平台只帮助各方老乡发布信息，不负责信息的真实性，点击查看公告详情。</Navigator>
-          </AtNoticebar>
+          <Navigator url='/pages/statement/index'>
+            <AtNoticebar single marquee icon='volume-plus' speed={80}>
+              平台公告: 本平台只帮助各方老乡发布信息，不负责信息的真实性，点击查看公告详情。
+            </AtNoticebar>
+          </Navigator>
           <View className='at-row at-row__justify--around tools'>
             {
               tools.map(item => {
@@ -154,7 +156,7 @@ class Index extends Component {
         <View className='page-body'>
           {
             list.map(item => {
-              return <Card key={item._id} info={item} onClick={this.toDetail.bind(this, item._id)}></Card>
+              return <Card key={item._id} info={item} onToDetail={this.onToDetail.bind(this, item._id)}></Card>
             })
           }
           {

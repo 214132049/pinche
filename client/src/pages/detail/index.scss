@@ -1,8 +1,10 @@
+page {
+  background: #ffffff;
+}
 .detail {
   &-main {
-    background: #42bffe;
+    background: #fcdf1a;
     padding: 40px;
-    color: #ffffff;
     &__header {
       display: flex;
       justify-content: center;
@@ -19,6 +21,30 @@
     &__body {
       text-align: center;
       margin-top: 50px;
+    }
+  }
+  .share-btns {
+    text-align: center;
+    button {
+      display: inline-block;
+      background: transparent;
+      line-height: 0;
+      &::after {
+        border: 0;
+      }
+    }
+    image {
+      width: 100px;
+      height: 100px;
+      & + image {
+        margin-left: 50px;
+      }
+    }
+  }
+  &.expired {
+    .detail-main {
+      background: #fcdf1a url('~@/assets/images/expired.png') no-repeat 60% center;
+      background-size: 160px 160px;
     }
   }
 }

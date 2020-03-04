@@ -91,15 +91,32 @@ class Index extends Component {
     }
   }
 
-  toDetail(id) {
+  onToDetail(id) {
     Taro.navigateTo({
       url: `/pages/detail/index?id=${id}`
     })
   }
 
-  toPublish() {
+  onToPublish() {
     Taro.switchTab({
-      url: '/pages/publish/index'
+      url: '/pages/publish_type/index'
+    })
+  }
+
+  onToEdit({id, type}) {
+    Taro.navigateTo({
+      url: `/pages/publish/index?id=${id}&type=${type}`
+    })
+  }
+
+  onToDelete(id) {
+    Taro.showModal({
+      title: '',
+      content: '确定删除这条信息吗？'
+    }).then(({ confirm }) => {
+      if (confirm) {
+        this.deletePublish(id)
+      }
     })
   }
 
@@ -127,6 +144,28 @@ class Index extends Component {
     }, () => this.onGetPublishMessage())
   }
 
+  async deletePublish (id) {
+    try {
+      await Server({
+        name: 'del_publish',
+        data: {
+          id
+        },
+        loadingTitle: '删除中'
+      })
+      this.refreshList(this.state.type)
+      Taro.showToast({
+        icon: 'success',
+        title: '删除成功'
+      })
+    } catch(e) {
+      Taro.showToast({
+        icon: 'error',
+        title: '删除失败，请重试'
+      })
+    }
+  }
+
   render () {
     const { tools, list, loading, loadend } = this.state
     return (
@@ -150,7 +189,14 @@ class Index extends Component {
         <View className='page-body'>
           {
             list.map(item => {
-              return <Card key={item._id} info={item} onClick={this.toDetail.bind(this, item._id)}></Card>
+              return <Card
+                key={item._id}
+                info={item}
+                ismine='true'
+                onToDetail={this.onToDetail.bind(this, item._id)}
+                onToDelete={this.onToDelete.bind(this, item._id)}
+                onToEdit={this.onToEdit.bind(this, item)}
+              ></Card>
             })
           }
           {
@@ -160,7 +206,7 @@ class Index extends Component {
             loadend ? <AtDivider className='divider' fontColor='#ccc' content='我是有底线的'></AtDivider> : ''
           }
         </View>
-        <View className='fab-btn' onClick={this.toPublish.bind(this)}>
+        <View className='fab-btn' onClick={this.onToPublish.bind(this)}>
           <Image src={publish}></Image>
           <Text>发布</Text>
         </View>

@@ -15,7 +15,8 @@ $padding: 16px;
   font-size: 32px;
   overflow: hidden;
   &.expired {
-    opacity: 0.3;
+    background: #ffffff url('~@/assets/images/expired.png') no-repeat 70% 20%;
+    background-size: 160px 160px;
   }
   .strong {
     color: #ff411e;
@@ -94,6 +95,8 @@ $padding: 16px;
     &--extra {
       color: #666666;
       font-size: 28px;
+      overflow: hidden;
+      text-overflow: ellipsis;
       .label {
         margin-right: 10px;
       }
@@ -109,6 +112,12 @@ $padding: 16px;
     }
     .at-button--secondary {
       border: 0;
+    }
+    .buttons {
+      display: flex;
+      at-button + at-button {
+        margin-left: 30px;
+      }
     }
   }
 }

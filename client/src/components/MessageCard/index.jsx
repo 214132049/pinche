@@ -25,16 +25,14 @@ const iconStyles = {
 
 const noop = () => {}
 
-function makePhone(phoneNumber) {
+function makePhone(phoneNumber, e) {
+  e.stopPropagation()
   Taro.makePhoneCall({
     phoneNumber
   })
 }
 
-export default function MessageCard({ info = {}, onClick = noop }) {
-  const iconStyle = iconStyles[info.sex] || {}
-  const type = types[info.type] || {}
-  const expired = dayjs().isSameOrAfter(`${info.date} ${info.time}`, 'minute')
+function getDateDes (info) {
   let dateDes = info.date
   if (dayjs().isSame(dayjs(info.date), 'date')) {
     // 同天
@@ -53,52 +51,84 @@ export default function MessageCard({ info = {}, onClick = noop }) {
   if (!dateDesMap.includes(dateDes) && dayjs().isSame(dayjs(info.date), 'year')) {
     dateDes = dayjs(info.date).format('MM-DD')
   }
+  return dateDes
+}
 
-  function handleClick () {
-    console.log(12)
-    if (expired) return
-    onClick()
+export default function MessageCard({
+    info = {},
+    onToDetail = noop,
+    onToDelete = noop,
+    onToEdit = noop,
+    ismine
+  }) {
+  const iconStyle = iconStyles[info.sex] || {}
+  const type = types[info.type] || {}
+  const expired = dayjs().isSameOrAfter(`${info.date} ${info.time}`, 'minute')
+  let dateDes = getDateDes(info)
+  
+  function handleItemClick (e) {
+    onToDetail()
+  }
+
+  function deletePublish (e) {
+    e.stopPropagation()
+    onToDelete()
+  }
+
+  function editPublish (e) {
+    e.stopPropagation()
+    onToEdit()
   }
 
   return (
-    <View className={expired ? 'info expired' : 'info'} onClick={handleClick}>
+    <View className={expired ? 'info expired' : 'info'}>
       <View className='info-tag' style={{backgroundColor: type.color}}>{type.label}</View>
-      <View className='info-city'>
-        <View className='info-city--item'>
-          <Text className='label start'>始</Text>{ info.start.name }
-        </View>
-        {/* <View className='line'></View> */}
-        <View className='info-city--item'>
-          <Text className='label end'>终</Text>{ info.end.name }
-        </View>
-      </View>
-      <View className='info-detail'>
-        <View className='info-detail--main'>
-          <View className='info-detail--main__left'>
-            <AtIcon value='clock' size='14' color='#666'></AtIcon>
-            <Text className='time'>
-              <Text className={dateDes === '今天' ? 'strong' : ''}>{dateDes}</Text> {info.time}
-            </Text>
-            <Text className='count'>
-              <Text className='strong'>{info.count}</Text>{type.countLabel}
-            </Text>
+      <View onClick={handleItemClick.bind(this)}>
+        <View className='info-city'>
+          <View className='info-city--item'>
+            <Text className='label start'>始</Text>{ info.start.name }
           </View>
-          <View className='info-detail--main__right'>
-            <Text className='price'>{!!info.price ? `¥${info.price}` : '面议'}</Text>
+          {/* <View className='line'></View> */}
+          <View className='info-city--item'>
+            <Text className='label end'>终</Text>{ info.end.name }
           </View>
         </View>
-        {
-          info.note ? <View className='info-detail--extra'>
-            <Text className='label'>备注:</Text>{info.note}
-          </View> : ''
-        }
+        <View className='info-detail'>
+          <View className='info-detail--main'>
+            <View className='info-detail--main__left'>
+              <AtIcon value='clock' size='14' color='#666'></AtIcon>
+              <Text className='time'>
+                <Text className={dateDes === '今天' ? 'strong' : ''}>{dateDes}</Text> {info.time}
+              </Text>
+              <Text className='count'>
+                <Text className='strong'>{info.count}</Text>{type.countLabel}
+              </Text>
+            </View>
+            <View className='info-detail--main__right'>
+              <Text className='price'>{!!info.price ? `¥${info.price}` : '面议'}</Text>
+            </View>
+          </View>
+          {
+            info.note ? <View className='info-detail--extra'>
+              <Text className='label'>备注:</Text>{info.note}
+            </View> : ''
+          }
+        </View>
       </View>
       <View className='info-user'>
-        <View className='info-user--content'>
-          <AtIcon prefixClass='iconfont' value={iconStyle.value} size='16' color={iconStyle.color}></AtIcon>
-          <Text className='name'>{info.name[0]}{iconStyle.label}</Text>
-        </View>
-        <AtButton className='at-icon at-icon-phone' type='secondary' size='small' onClick={() => makePhone(info.moblie)}>联系Ta</AtButton>
+        {
+          ismine ? <View></View> : <View className='info-user--content'>
+            <AtIcon prefixClass='iconfont' value={iconStyle.value} size='16' color={iconStyle.color}></AtIcon>
+            <Text className='name'>{info.name[0]}{iconStyle.label}</Text>
+          </View>
+        }
+        
+        { 
+          ismine ? <View className='buttons'>
+            <AtButton type='secondary' size='small' onClick={deletePublish.bind(this)}>删除</AtButton>
+            <AtButton type='primary' size='small' onClick={editPublish.bind(this)}>编辑</AtButton>
+          </View> : <AtButton className='at-icon at-icon-phone' type='secondary' size='small' onClick={makePhone.bind(this, info.moblie)}>联系Ta</AtButton>
+        }
       </View>
     </View>
   )
