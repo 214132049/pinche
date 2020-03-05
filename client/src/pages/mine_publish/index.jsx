@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import { AtActivityIndicator, AtDivider } from 'taro-ui'
-import { Card } from '@/components'
+import { Card, NoData } from '@/components'
 import Server from '@/utils/server'
 import car from '@/assets/images/car.png'
 import publish from '@/assets/images/publish.png'
@@ -203,7 +203,7 @@ class Index extends Component {
             loading ? <AtActivityIndicator mode='center' content='加载中...'></AtActivityIndicator> : ''
           }
           {
-            loadend ? <AtDivider className='divider' fontColor='#ccc' content='我是有底线的'></AtDivider> : ''
+            loadend ? list.length ? <AtDivider className='divider' fontColor='#ccc' content='我是有底线的'></AtDivider> : <NoData></NoData> : ''
           }
         </View>
         <View className='fab-btn' onClick={this.onToPublish.bind(this)}>

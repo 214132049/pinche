@@ -29,10 +29,10 @@ class App extends Component {
       'pages/mine_publish/index'
     ],
     window: {
-      backgroundTextStyle: 'dark',
-      navigationBarBackgroundColor: '#fcdf1a',
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#2577e3',
       navigationBarTitleText: '周沪拼车',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'white'
     },
     tabBar: {
       custom: false,

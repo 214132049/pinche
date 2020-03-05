@@ -1,15 +1,15 @@
 import Taro from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Label } from '@tarojs/components'
 
 import './index.scss'
 
 export default function PickerInput(props) {
-  const { value = '', title = '', placeholder = '请选择' } = props
+  const { value = '', title = '', placeholder = '请选择', required = false } = props
   return (
     <View className='form-picker'>
       <View className='form-picker__container'>
-        <View className='form-picker__title'>
-          <Text>{title}</Text>
+        <View className={required ? 'form-picker__title required' : 'form-picker__title'}>
+          <Label>{title}</Label>
         </View>
         <View
           className={
@@ -19,6 +19,15 @@ export default function PickerInput(props) {
           <Text>{value || placeholder}</Text>
         </View>
       </View>
+      <Text className='at-icon at-icon-chevron-right'></Text>
     </View>
   )
+}
+
+PickerInput.options = {
+  addGlobalClass: true
+}
+
+PickerInput.propsType = {
+  required: Boolean
 }

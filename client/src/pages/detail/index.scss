@@ -2,10 +2,12 @@ page {
   background: #ffffff;
 }
 .detail {
-  &-main {
-    background: #fcdf1a;
+  &-header {
+    position: relative;
+    background: #2577e3;
+    color: #ffffff;
     padding: 40px;
-    &__header {
+    &__city {
       display: flex;
       justify-content: center;
       text-align: center;
@@ -18,9 +20,47 @@ page {
         flex: 1;
       }
     }
-    &__body {
+    &__time {
       text-align: center;
       margin-top: 50px;
+      .at-icon {
+        vertical-align: middle;
+        font-size: 28px;
+      }
+    }
+    .expired-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      transform: translateY(-50%);
+      background: url('~@/assets/images/expired.png') no-repeat center;
+      background-size: 100%;
+      z-index: 50;
+    }
+  }
+  .detail-body {
+    width: 80%;
+    margin: 50px auto 0;
+    &__item {
+      display: flex;
+      justify-content: space-between;
+      line-height: 42px;
+      margin-bottom: 20px;
+      &--title {
+        width: 160px;
+        color: #999999;
+        margin-right: 50px;
+      }
+      &--content {
+        display: flex;
+        flex: 1;
+        justify-content: flex-end;
+        text {
+          text-align: left;
+        }
+      }
     }
   }
   .share-btns {
@@ -41,10 +81,8 @@ page {
       }
     }
   }
-  &.expired {
-    .detail-main {
-      background: #fcdf1a url('~@/assets/images/expired.png') no-repeat 60% center;
-      background-size: 160px 160px;
-    }
+  .home-btn {
+    width: 50%;
+    margin: 50px auto;
   }
 }

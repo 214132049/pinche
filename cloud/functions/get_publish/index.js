@@ -8,10 +8,11 @@ cloud.init({
 // 云函数入口函数
 exports.main = async (event, context) => {
   const param = event.data
+  const db = cloud.database()
+  const _ = db.command
   try {
     const { OPENID } = cloud.getWXContext()
     // get data
-    const db = cloud.database()
     const collection = db.collection('pinche_messages')
     const filter = {
       valid: true
@@ -27,6 +28,8 @@ exports.main = async (event, context) => {
     }
     if (param.ismine) {
       filter.openid = OPENID
+    } else {
+      filter.departureTime = _.gt(new Date())
     }
     const pagesize = param.pagesize || 10 // 每页查询多少条，默认10条
     const pageno = param.pageno || 1 // 当前第几页，默认第一页

@@ -29,7 +29,7 @@ class Index extends Component {
     return (
       <View className='page'>
         <View className='user-info'>
-          <AtAvatar circle openData={{ type: 'userAvatarUrl'}}></AtAvatar>
+          <AtAvatar circle size='large' openData={{ type: 'userAvatarUrl'}}></AtAvatar>
           <open-data type='userNickName'></open-data>
         </View>
         <AtList>

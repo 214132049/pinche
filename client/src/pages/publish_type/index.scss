@@ -1,6 +1,17 @@
-.page {
+page {
   background: #ffffff;
+}
+.page {
   padding: 20px 0;
+  .tip {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 4px;
+    font-size: 24px;
+    background: #e0e5ec;
+    color: #999999;
+  }
   .tools {
     &-item {
       display: flex;
@@ -9,11 +20,11 @@
       font-size: 32px;
       border-radius: 20px;
       margin: 0 50px;
-      height: 80px;
+      height: 100px;
       color: #ffffff;
       image {
-        width: 50px;
-        height: 50px;
+        width: 80px;
+        height: 80px;
         margin-right: 10px;
       }
     }

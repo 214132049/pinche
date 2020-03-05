@@ -213,7 +213,7 @@ class Index extends Component {
         title: '发布成功'
       })
       Taro.navigateTo({
-        url: `/pages/detail/index?id=${id}`
+        url: `/pages/detail/index?id=${id}&from=1`
       })
     } catch (e) {
       const error = e.errors ? e.errors[0] : e
@@ -232,27 +232,23 @@ class Index extends Component {
     let findPeople = form.type == '2'
     return (
       <View className='form'>
-        {/* <View className='form-card'>
-          <View className='form-card__title'>
-            <Text>拼车类型</Text>
-          </View>
+        <View className='form-card'>
           <View className='form-card__main'>
-            <AtRadio
-              options={[
-                { label: '人找车', value: '1' },
-                { label: '车找人', value: '2' },
-              ]}
-              value={form.type}
-              onClick={this.onFieldChange.bind(this, 'type')}
-            />
+            <AtInput
+              title='拼车类型'
+              type='text'
+              editable={false}
+              value={findPeople ? '车找人' : '人找车'}
+            ></AtInput>
           </View>
-        </View> */}
+        </View>
         <View className='form-card'>
           <View className='form-card__title'>
             <Text>拼车信息</Text>
           </View>
           <View className='form-card__main'>
             <AtInput
+              required
               name='start'
               title='出发地'
               type='text'
@@ -262,6 +258,7 @@ class Index extends Component {
               onClick={this.onCityClick.bind(this, 'start')}
             ></AtInput>
             <AtInput
+              required
               name='end'
               title='目的地'
               type='text'
@@ -277,6 +274,7 @@ class Index extends Component {
               onChange={this.onFieldChange.bind(this, 'date')}
             >
               <PickInput
+                required
                 title='出发日期'
                 value={form.date}
                 placeholder='请选择出发日期'
@@ -288,6 +286,7 @@ class Index extends Component {
               onChange={this.onFieldChange.bind(this, 'time')}
             >
               <PickInput
+                required
                 title='出发时间'
                 value={form.time}
                 placeholder='请选择出发时间'
@@ -303,6 +302,7 @@ class Index extends Component {
                 onChange={this.onFieldChange.bind(this, 'cartype')}
               >
                 <PickInput
+                  required
                   title='车型'
                   value={carSelector[carSelected] ? carSelector[carSelected].label : ''}
                   placeholder='请选择车型'
@@ -317,6 +317,7 @@ class Index extends Component {
               onChange={this.onFieldChange.bind(this, 'count')}
             >
               <PickInput
+                required
                 title={findPeople ? '空位数' : '乘坐人数'}
                 value={countSelector[countSelected]}
                 placeholder={findPeople ? '请选择空位数' : '请选择乘坐人数'}
@@ -327,7 +328,7 @@ class Index extends Component {
               title='车费'
               type='phone'
               maxLength='11'
-              placeholder='请输入车费(选填)'
+              placeholder='请输入车费(面议)'
               value={form.price}
               onChange={this.onFieldChange.bind(this, 'price')}
             ></AtInput>
@@ -339,6 +340,7 @@ class Index extends Component {
           </View>
           <View className='form-card__main'>
             <AtInput
+              required
               name='name'
               title='姓名'
               type='text'
@@ -355,12 +357,14 @@ class Index extends Component {
               onChange={this.onFieldChange.bind(this, 'sex')}
             >
               <PickInput
+                required
                 title='性别'
                 value={sexSelector[sexSelected] ? sexSelector[sexSelected].label : ''}
                 placeholder='请选择性别'
               ></PickInput>
             </Picker>
             <AtInput
+              required
               name='moblie'
               title='手机号码'
               type='phone'

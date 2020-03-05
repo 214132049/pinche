@@ -2,17 +2,13 @@ import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtButton, AtIcon } from 'taro-ui'
 import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
-import 'dayjs/locale/zh-cn'
+import getDateDes from '@/utils/date'
+
 import './index.scss'
 
-dayjs.extend(relativeTime)
 dayjs.extend(isSameOrAfter)
-dayjs.locale('zh-cn')
 
-const oneday = 24 * 3600 * 1000
-const dateDesMap = ['今天', '明天', '后天']
 const types = {
   1: { label: '人找车', color: '#fc6639', countLabel: '人同行'},
   2: { label: '车找人', color: '#fba81e', countLabel: '个座位'}
@@ -32,28 +28,6 @@ function makePhone(phoneNumber, e) {
   })
 }
 
-function getDateDes (info) {
-  let dateDes = info.date
-  if (dayjs().isSame(dayjs(info.date), 'date')) {
-    // 同天
-    dateDes = dateDesMap[0]
-  } else if (dayjs().isBefore(dayjs(info.date), 'date')) {
-    // 出发日期之前
-    const instance = dayjs(`${info.date} 00:00:00`).valueOf() - dayjs().valueOf()
-    if (instance < oneday) {
-      dateDes = dateDesMap[1]
-    } else if (instance < 2 * oneday) {
-      dateDes = dateDesMap[2]
-    }
-  }
-
-  // 同年不展示年份
-  if (!dateDesMap.includes(dateDes) && dayjs().isSame(dayjs(info.date), 'year')) {
-    dateDes = dayjs(info.date).format('MM-DD')
-  }
-  return dateDes
-}
-
 export default function MessageCard({
     info = {},
     onToDetail = noop,
@@ -66,7 +40,7 @@ export default function MessageCard({
   const expired = dayjs().isSameOrAfter(`${info.date} ${info.time}`, 'minute')
   let dateDes = getDateDes(info)
   
-  function handleItemClick (e) {
+  function handleItemClick () {
     onToDetail()
   }
 
@@ -81,8 +55,11 @@ export default function MessageCard({
   }
 
   return (
-    <View className={expired ? 'info expired' : 'info'}>
+    <View className='info'>
       <View className='info-tag' style={{backgroundColor: type.color}}>{type.label}</View>
+      {
+        expired ? <View className='expired-icon'></View> : ''
+      }
       <View onClick={handleItemClick.bind(this)}>
         <View className='info-city'>
           <View className='info-city--item'>

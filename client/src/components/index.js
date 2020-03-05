@@ -1,12 +1,15 @@
 import PickInput from './PickInput'
 import Card from './MessageCard'
+import NoData from './NoData'
 
 export {
   PickInput,
-  Card
+  Card,
+  NoData
 }
 
 export default {
   PickInput,
-  Card
+  Card,
+  NoData
 }

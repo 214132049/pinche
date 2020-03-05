@@ -55,6 +55,8 @@ const validator = new schema(descriptor)
 exports.main = async (event, context) => {
   const eventData = event.data
   const wxContext = cloud.getWXContext()
+  const db = cloud.database()
+
   try {
     // validate data
     await validator.validate(eventData).catch(e => {
@@ -70,7 +72,8 @@ exports.main = async (event, context) => {
     data.top = false // 置顶
     data.valid = true // 是否有效
     data.departureTime = new Date(`${data.date} ${data.time}`) // 出发时间
-
+    data.end.location = db.Geo.Point(data.end.longitude, data.end.latitude)
+    data.start.location = db.Geo.Point(data.start.longitude, data.start.latitude)
     data.openid = wxContext.OPENID
     data.appid = wxContext.APPID
     data.unionid = wxContext.UNIONID
@@ -79,7 +82,6 @@ exports.main = async (event, context) => {
     delete data.end.errMsg
 
     // insert data
-    const db = cloud.database()
     const { _id } = await db.collection('pinche_messages').add({
       data: {
         ...data,

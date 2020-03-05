@@ -16,7 +16,10 @@ export default function PublishType () {
 
   return (
     <View className='page'>
-      <AtDivider className='divider' fontColor='#ccc' content='选择发布类型'></AtDivider>
+      <View className='tip'>
+        免责声明：平台发布的所有信息，平台只负责发布、展示，与平台无关，平台不负任何责任。请认真核实消息的真实性。
+      </View>
+      <AtDivider className='divider' fontColor='#ccc' content='请选择您要发布的栏目'></AtDivider>
       <View className='at-row at-row__justify--around tools'>
         {
           tools.map(item => {

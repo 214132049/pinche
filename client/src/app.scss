@@ -55,4 +55,10 @@ page {
 .divider {
   width: 60%;
   margin: 0 auto;
+  .at-divider__line {
+    background-color: #EEE;
+  }
+  .at-divider__content {
+    font-size: 28px;
+  }
 }
