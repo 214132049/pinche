@@ -212,7 +212,7 @@ class Index extends Component {
         icon: 'success',
         title: '发布成功'
       })
-      Taro.navigateTo({
+      Taro.redirectTo({
         url: `/pages/detail/index?id=${id}&from=1`
       })
     } catch (e) {

@@ -32,7 +32,6 @@ class Index extends Component {
   }
 
   componentDidShow () {
-    this.refreshList('')
   }
 
   componentDidHide () { }

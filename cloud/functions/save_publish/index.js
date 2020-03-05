@@ -71,7 +71,7 @@ exports.main = async (event, context) => {
     })
     data.top = false // 置顶
     data.valid = true // 是否有效
-    data.departureTime = new Date(`${data.date} ${data.time}`) // 出发时间
+    data.departureTime = new Date(`${data.date} ${data.time} GMT+0800`) // 出发时间
     data.end.location = db.Geo.Point(data.end.longitude, data.end.latitude)
     data.start.location = db.Geo.Point(data.start.longitude, data.start.latitude)
     data.openid = wxContext.OPENID
