@@ -55,7 +55,7 @@ export default function MessageCard({
   }
 
   return (
-    <View className='info'>
+    <View className={expired ? 'info expired' : 'info'}>
       <View className='info-tag' style={{backgroundColor: type.color}}>{type.label}</View>
       {
         expired ? <View className='expired-icon'></View> : ''
@@ -73,7 +73,7 @@ export default function MessageCard({
         <View className='info-detail'>
           <View className='info-detail--main'>
             <View className='info-detail--main__left'>
-              <AtIcon value='clock' size='14' color='#666'></AtIcon>
+              <AtIcon value='clock' size='14' color={expired ? '#ccc' : '#666'}></AtIcon>
               <Text className='time'>
                 <Text className={dateDes === '今天' ? 'strong' : ''}>{dateDes}</Text> {info.time}
               </Text>
@@ -95,16 +95,19 @@ export default function MessageCard({
       <View className='info-user'>
         {
           ismine ? <View></View> : <View className='info-user--content'>
-            <AtIcon prefixClass='iconfont' value={iconStyle.value} size='16' color={iconStyle.color}></AtIcon>
+            <AtIcon prefixClass='iconfont' value={iconStyle.value} size='16' color={expired ? '#ccc' : iconStyle.color}></AtIcon>
             <Text className='name'>{info.name[0]}{iconStyle.label}</Text>
           </View>
         }
-        
         { 
-          ismine ? <View className='buttons'>
-            <AtButton type='secondary' size='small' onClick={deletePublish.bind(this)}>删除</AtButton>
-            <AtButton type='primary' size='small' onClick={editPublish.bind(this)}>编辑</AtButton>
-          </View> : <AtButton className='at-icon at-icon-phone' type='secondary' size='small' onClick={makePhone.bind(this, info.moblie)}>联系Ta</AtButton>
+          !expired ?
+            ismine ? 
+              <View className='buttons'>
+                <AtButton type='secondary' size='small' onClick={deletePublish.bind(this)}>删除</AtButton>
+                <AtButton type='primary' size='small' onClick={editPublish.bind(this)}>编辑</AtButton>
+              </View> :
+              <AtButton className='at-icon at-icon-phone' type='secondary' size='small' onClick={makePhone.bind(this, info.moblie)}>联系Ta</AtButton>
+            : ''
         }
       </View>
     </View>

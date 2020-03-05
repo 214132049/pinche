@@ -40,7 +40,7 @@ const config = {
     ]
   },
   defineConstants: {
-    NODE_ENV: process.env.NODE_ENV
+    IS_PRO: process.env.NODE_ENV === 'production'
   },
   mini: {
     postcss: {

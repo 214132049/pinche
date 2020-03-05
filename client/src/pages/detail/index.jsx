@@ -85,7 +85,7 @@ export default function Detail() {
   let sexlabel = iconStyles[detail.sex] ? iconStyles[detail.sex].label : ''
 
   return (
-    <View className='detail'>
+    <View className={expired ? 'detail expired' : 'detail'}>
       <View className='detail-header'>
         {
           expired ? <View className='expired-icon'></View> : ''

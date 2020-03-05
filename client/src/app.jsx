@@ -64,6 +64,7 @@ class App extends Component {
   }
 
   componentDidShow () {
+    // console.log(IS_PRO)
     Taro.cloud.init({
       traceUser: true
     })
