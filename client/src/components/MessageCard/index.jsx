@@ -39,18 +39,16 @@ export default function MessageCard({
   const type = types[info.type] || {}
   const expired = dayjs().isSameOrAfter(`${info.date} ${info.time}`, 'minute')
   let dateDes = getDateDes(info)
-  
+
   function handleItemClick () {
     onToDetail()
   }
 
-  function deletePublish (e) {
-    e.stopPropagation()
+  function deletePublish () {
     onToDelete()
   }
 
-  function editPublish (e) {
-    e.stopPropagation()
+  function editPublish () {
     onToEdit()
   }
 
@@ -58,7 +56,7 @@ export default function MessageCard({
     <View className={expired ? 'info expired' : 'info'}>
       <View className='info-tag' style={{backgroundColor: type.color}}>{type.label}</View>
       {
-        expired ? <View className='expired-icon'></View> : ''
+        expired ? <View className='expired-icon' /> : ''
       }
       <View onClick={handleItemClick.bind(this)}>
         <View className='info-city'>
@@ -73,7 +71,7 @@ export default function MessageCard({
         <View className='info-detail'>
           <View className='info-detail--main'>
             <View className='info-detail--main__left'>
-              <AtIcon value='clock' size='14' color={expired ? '#ccc' : '#666'}></AtIcon>
+              <AtIcon value='clock' size='14' color={expired ? '#ccc' : '#666'} />
               <Text className='time'>
                 <Text className={dateDes === '今天' ? 'strong' : ''}>{dateDes}</Text> {info.time}
               </Text>
@@ -94,21 +92,36 @@ export default function MessageCard({
       </View>
       <View className='info-user'>
         {
-          ismine ? <View></View> : <View className='info-user--content'>
-            <AtIcon prefixClass='iconfont' value={iconStyle.value} size='16' color={expired ? '#ccc' : iconStyle.color}></AtIcon>
+          ismine ? <View /> : <View className='info-user--content'>
+            <AtIcon prefixClass='iconfont' value={iconStyle.value} size='16'
+              color={expired ? '#ccc' : iconStyle.color}
+            />
             <Text className='name'>{info.name[0]}{iconStyle.label}</Text>
           </View>
         }
-        { 
-          !expired ?
-            ismine ? 
+        {/*使用多包裹一层多方式，阻止冒泡*/}
+        <View className='buttons-box' onClick={e => e.stopPropagation()}>
+          {
+            ismine ?
               <View className='buttons'>
-                <AtButton type='secondary' size='small' onClick={deletePublish.bind(this)}>删除</AtButton>
-                <AtButton type='primary' size='small' onClick={editPublish.bind(this)}>编辑</AtButton>
+                <AtButton type='secondary' size='small'
+                  onClick={deletePublish.bind(this)}
+                >删除</AtButton>
+                {
+                  expired ?
+                    '' :
+                    <AtButton type='primary' size='small'
+                      onClick={editPublish.bind(this)}
+                    >编辑</AtButton>
+                }
               </View> :
-              <AtButton className='at-icon at-icon-phone' type='secondary' size='small' onClick={makePhone.bind(this, info.moblie)}>联系Ta</AtButton>
-            : ''
-        }
+              !expired ?
+                <AtButton className='at-icon at-icon-phone' type='secondary' size='small'
+                  onClick={makePhone.bind(this, info.moblie)}
+                >联系Ta</AtButton>
+                : ''
+          }
+        </View>
       </View>
     </View>
   )
