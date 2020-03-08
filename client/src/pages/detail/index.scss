@@ -67,9 +67,14 @@ page {
     button {
       display: inline-block;
       background: transparent;
+      height: 150px;
       line-height: 0;
       &::after {
         border: 0;
+      }
+      .text {
+        margin-top: 20px;
+        font-size: 24px;
       }
     }
     image {
@@ -82,7 +87,7 @@ page {
   }
   .home-btn {
     width: 50%;
-    margin: 50px auto;
+    margin: 120px auto 0;
   }
   &.expired {
     color: #ccc !important;

@@ -206,7 +206,7 @@ class Index extends Component {
             loadend ? list.length ? <AtDivider className='divider' fontColor='#ccc' content='我是有底线的'></AtDivider> : <NoData></NoData> : ''
           }
         </View>
-        <View className='fab-btn' onClick={this.onToPublish.bind(this)}>
+        <View className='fab-btn' onClick={this.onToPublish}>
           <Image src={publish}></Image>
           <Text>发布</Text>
         </View>

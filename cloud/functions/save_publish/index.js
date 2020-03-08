@@ -72,14 +72,11 @@ exports.main = async (event, context) => {
     data.top = false // 置顶
     data.valid = true // 是否有效
     data.departureTime = new Date(`${data.date} ${data.time} GMT+0800`) // 出发时间
-    data.end.location = db.Geo.Point(data.end.longitude, data.end.latitude)
-    data.start.location = db.Geo.Point(data.start.longitude, data.start.latitude)
+    data.endlocation = db.Geo.Point(data.end.longitude, data.end.latitude)
+    data.startlocation = db.Geo.Point(data.start.longitude, data.start.latitude)
     data.openid = wxContext.OPENID
     data.appid = wxContext.APPID
     data.unionid = wxContext.UNIONID
-
-    delete data.start.errMsg
-    delete data.end.errMsg
 
     // insert data
     const { _id } = await db.collection('pinche_messages').add({

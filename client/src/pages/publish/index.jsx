@@ -159,8 +159,8 @@ class Index extends Component {
   }
 
   openMap () {
-    Taro.chooseLocation().then(res => {
-      this.updateForm(this.state.currentCity, res)
+    Taro.chooseLocation().then(({name, longitude, latitude}) => {
+      this.updateForm(this.state.currentCity, {name, longitude, latitude})
     })
   }
 
@@ -390,7 +390,7 @@ class Index extends Component {
         </View>
         <View className='statement-box'>
           <CheckboxGroup onChange={this.onAgreementChange.bind(this)}>
-            <Checkbox value='true' checked={checked} />发布前请阅读并同意
+            <Checkbox value='true' checked={checked} />我已请阅读并同意
             <Navigator url='/pages/statement/index'>《服务协议》</Navigator>
           </CheckboxGroup>
         </View>

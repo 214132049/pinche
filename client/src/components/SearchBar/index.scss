@@ -1,0 +1,21 @@
+.search-bar {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: rgba($color: #fff, $alpha: 0.8);
+  padding: 20px 30px;
+  &_main {
+    display: flex;
+    box-sizing: border-box;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 20px;
+    border-radius: 60px;
+    background-color: #f7f7f7;
+    color: #ccc;
+    font-size: 28px;
+    align-items: center;
+    at-icon {
+      margin-right: 10px;
+    }
+  }
+}

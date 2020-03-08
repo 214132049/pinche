@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Navigator } from '@tarojs/components'
-import { AtNoticebar, AtActivityIndicator, AtDivider } from 'taro-ui'
+import { AtActivityIndicator, AtDivider } from 'taro-ui'
 import Server from '@/utils/server'
-import { Card, NoData } from '@/components'
+import { Card, NoData, SearchBar } from '@/components'
 
 import './index.scss'
 
@@ -15,7 +15,7 @@ class Index extends Component {
       list: [],
       pagesize: 10,
       pageno: 1,
-      type: '',
+      filters: {},
       loadend: false,
       loading: false
     }
@@ -38,7 +38,7 @@ class Index extends Component {
 
   onPullDownRefresh() {
     Taro.stopPullDownRefresh()
-    this.refreshList('')
+    this.refreshList()
   }
 
   onReachBottom() {
@@ -46,7 +46,7 @@ class Index extends Component {
   }
 
   async onGetPublishMessage() {
-    let { loading, list, pageno, pagesize, type, loadend } = this.state
+    let { loading, list, pageno, pagesize, filters, loadend } = this.state
     if (loading || loadend) {
       return
     }
@@ -54,14 +54,14 @@ class Index extends Component {
       this.setState({
         loading: true
       })
-    } 
+    }
     try {
       const { data, totalpage } = await Server({
         name: 'get_publish',
         data: {
           pagesize,
           pageno,
-          type
+          ...filters
         },
         noloading: true
       })
@@ -89,13 +89,30 @@ class Index extends Component {
     })
   }
 
-  refreshList(type) {
+  refreshList(data={}) {
+    let filters = {}
+    for(let key in data) {
+      if (data[key]) {
+        filters[key] = data[key]
+      }
+    }
     this.setState({
       list: [],
       pageno: 1,
       loadend: false,
-      type
+      filters
     }, () => this.onGetPublishMessage())
+  }
+
+  toSearch() {
+    Taro.navigateTo({
+      url: '/pages/search/index',
+      events: {
+        acceptFormData: (data) => {
+          this.refreshList(data)
+        }
+      }
+    })
   }
 
   render () {
@@ -103,11 +120,7 @@ class Index extends Component {
     return (
       <View className='page'>
         <View className='page-header'>
-          <Navigator url='/pages/statement/index'>
-            <AtNoticebar single marquee icon='volume-plus' speed={80}>
-              平台公告: 本平台只帮助各方老乡发布信息，不负责信息的真实性，点击查看公告详情。
-            </AtNoticebar>
-          </Navigator>
+          <SearchBar onClick={this.toSearch.bind(this)} />
         </View>
         <View className='page-body'>
           {
