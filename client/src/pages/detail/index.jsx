@@ -38,9 +38,7 @@ function goHomePage() {
 
 export default function Detail() {
 
-  const [detail, setDetail] = useState({
-    name: ''
-  })
+  const [detail, setDetail] = useState({})
   const [expired, setExpired] = useState(false)
   const router = useRouter()
 
@@ -63,8 +61,7 @@ export default function Detail() {
           name: 'get_detail',
           data: {
             id
-          },
-          noloading: true
+          }
         })
         const _expired = dayjs().isSameOrAfter(`${data.date} ${data.time}`, 'minute')
         setDetail(data)
@@ -83,7 +80,9 @@ export default function Detail() {
   let countLabel = types[detail.type] ? types[detail.type].countLabel : ''
   let price = !!detail.price ? `¥${detail.price}` : '面议'
   let sexlabel = iconStyles[detail.sex] ? iconStyles[detail.sex].label : ''
+  let userName = detail.name ? detail.name[0] : ''
 
+  if (Object.keys(detail).length === 0) return ''
   return (
     <View className={expired ? 'detail expired' : 'detail'}>
       <View className='detail-header'>
@@ -93,13 +92,16 @@ export default function Detail() {
         <View className='detail-header__city'>
           <Text className='name'>{detail.start.name}</Text>
           <View className='arrow'>
-            <AtIcon prefixClass='iconfont' value='arrow' size='28' color='#ffffff'></AtIcon>
+            <AtIcon prefixClass='iconfont' value='arrow' size='28' color='#ffffff' />
           </View>
           <Text className='name'>{detail.end.name}</Text>
         </View>
         <View className='detail-header__time'>
           <View>{detail.time} 出发</View>
-          <View>{getDateDes(detail)} <Text className='at-icon at-icon-calendar'></Text></View>
+          <View>
+            {getDateDes(detail)}
+            <Text className='at-icon at-icon-calendar' />
+          </View>
         </View>
       </View>
       <View className='detail-body'>
@@ -118,7 +120,7 @@ export default function Detail() {
         <View className='detail-body__item'>
           <Label className='detail-body__item--title'>联系人</Label>
           <View className='detail-body__item--content'>
-            <Text>{detail.name[0] + sexlabel}</Text>
+            <Text>{userName + sexlabel}</Text>
           </View>
         </View>
         <View className='detail-body__item'>
@@ -140,20 +142,26 @@ export default function Detail() {
             <View className='share-btns'>
               <Button openType='share'>
                 <Image src={weixin}></Image>
+                <View className='text'>分享给好友</View>
               </Button>
               {/* <Button>
                 <Image src={miniCode}></Image>
               </Button> */}
               <Button onClick={makePhone.bind(this, detail.moblie)}>
                 <Image src={call}></Image>
+                <View className='text'>联系Ta</View>
               </Button>
             </View>
           </View> : ''
       }
       {
-        !fromEdit ? <View className='home-btn'>
-          <AtButton type='primary' size='small' onClick={goHomePage.bind(this)}>返回首页</AtButton>
-        </View> : ''
+        !fromEdit ?
+          <View className='home-btn'>
+            <AtButton type='secondary' size='small'
+              onClick={goHomePage}
+            >返回首页</AtButton>
+          </View>
+        : ''
       }
     </View>
   )

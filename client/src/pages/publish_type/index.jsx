@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { View, Image, Text } from '@tarojs/components'
+import { View, Image, Text, Navigator } from '@tarojs/components'
 import { AtDivider } from 'taro-ui'
 import car from '@/assets/images/car.png'
 import people from '@/assets/images/people.png'
@@ -17,7 +17,7 @@ export default function PublishType () {
   return (
     <View className='page'>
       <View className='tip'>
-        免责声明：平台发布的所有信息，平台只负责发布、展示，与平台无关，平台不负任何责任。请认真核实消息的真实性。
+        免责声明：平台发布的所有信息，平台只负责发布、展示，与平台无关，平台不负任何责任。<Navigator url='/pages/statement/index'>点击查看服务协议详情。</Navigator>
       </View>
       <AtDivider className='divider' fontColor='#ccc' content='请选择您要发布的栏目'></AtDivider>
       <View className='at-row at-row__justify--around tools'>

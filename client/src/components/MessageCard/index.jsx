@@ -53,42 +53,40 @@ export default function MessageCard({
   }
 
   return (
-    <View className={expired ? 'info expired' : 'info'}>
+    <View className={expired ? 'info expired' : 'info'} onClick={handleItemClick.bind(this)}>
       <View className='info-tag' style={{backgroundColor: type.color}}>{type.label}</View>
       {
         expired ? <View className='expired-icon' /> : ''
       }
-      <View onClick={handleItemClick.bind(this)}>
-        <View className='info-city'>
-          <View className='info-city--item'>
-            <Text className='label start'>始</Text>{ info.start.name }
+      <View className='info-city'>
+        <View className='info-city--item'>
+          <Text className='label start'>始</Text>{ info.start.name }
+        </View>
+        {/* <View className='line'></View> */}
+        <View className='info-city--item'>
+          <Text className='label end'>终</Text>{ info.end.name }
+        </View>
+      </View>
+      <View className='info-detail'>
+        <View className='info-detail--main'>
+          <View className='info-detail--main__left'>
+            <AtIcon value='clock' size='14' color={expired ? '#ccc' : '#666'} />
+            <Text className='time'>
+              <Text className={dateDes === '今天' ? 'strong' : ''}>{dateDes}</Text> {info.time}
+            </Text>
+            <Text className='count'>
+              <Text className='strong'>{info.count}</Text>{type.countLabel}
+            </Text>
           </View>
-          {/* <View className='line'></View> */}
-          <View className='info-city--item'>
-            <Text className='label end'>终</Text>{ info.end.name }
+          <View className='info-detail--main__right'>
+            <Text className='price'>{!!info.price ? `¥${info.price}` : '面议'}</Text>
           </View>
         </View>
-        <View className='info-detail'>
-          <View className='info-detail--main'>
-            <View className='info-detail--main__left'>
-              <AtIcon value='clock' size='14' color={expired ? '#ccc' : '#666'} />
-              <Text className='time'>
-                <Text className={dateDes === '今天' ? 'strong' : ''}>{dateDes}</Text> {info.time}
-              </Text>
-              <Text className='count'>
-                <Text className='strong'>{info.count}</Text>{type.countLabel}
-              </Text>
-            </View>
-            <View className='info-detail--main__right'>
-              <Text className='price'>{!!info.price ? `¥${info.price}` : '面议'}</Text>
-            </View>
-          </View>
-          {
-            info.note ? <View className='info-detail--extra'>
-              <Text className='label'>备注:</Text>{info.note}
-            </View> : ''
-          }
-        </View>
+        {
+          info.note ? <View className='info-detail--extra'>
+            <Text className='label'>备注:</Text>{info.note}
+          </View> : ''
+        }
       </View>
       <View className='info-user'>
         {
