@@ -4,6 +4,7 @@ import { AtButton, AtInput, AtTextarea, AtModal, AtModalHeader, AtModalContent, 
 import dayjs from 'dayjs'
 import schema from 'async-validator'
 import { PickInput } from '@/components'
+import { carSelector, sexSelector } from '@/constants'
 import Server from '@/utils/server'
 
 import './index.scss'
@@ -79,13 +80,6 @@ class Index extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      sexSelector: [{key: '1', label: '男'}, {key: '0', label: '女'}],
-      carSelector: [
-        {key: '1', label: '轿车'},
-        {key: '2', label: 'SUV'},
-        {key: '3', label: 'MPV'},
-        {key: '4', label: '其他'}
-      ],
       countSelector: ['1', '2', '3', '4', '5', '6'],
       isOpened: false,
       checked: false,
@@ -213,7 +207,7 @@ class Index extends Component {
         title: '发布成功'
       })
       Taro.redirectTo({
-        url: `/pages/detail/index?id=${id}&from=1`
+        url: `/pages/detail/index?id=${id}`
       })
     } catch (e) {
       const error = e.errors ? e.errors[0] : e
@@ -225,7 +219,7 @@ class Index extends Component {
   }
 
   render () {
-    const { form, sexSelector, carSelector, countSelector, isOpened, checked }= this.state
+    const { form, countSelector, isOpened, checked }= this.state
     let sexSelected = sexSelector.findIndex(v => v.key == form.sex)
     let carSelected = carSelector.findIndex(v => v.key == form.cartype)
     let countSelected = form.count - 1
@@ -239,7 +233,7 @@ class Index extends Component {
               type='text'
               editable={false}
               value={findPeople ? '车找人' : '人找车'}
-            ></AtInput>
+            />
           </View>
         </View>
         <View className='form-card'>
@@ -256,7 +250,7 @@ class Index extends Component {
               editable={false}
               value={form.start.name}
               onClick={this.onCityClick.bind(this, 'start')}
-            ></AtInput>
+            />
             <AtInput
               required
               name='end'
@@ -266,7 +260,7 @@ class Index extends Component {
               editable={false}
               value={form.end.name}
               onClick={this.onCityClick.bind(this, 'end')}
-            ></AtInput>
+            />
             <Picker
               mode='date'
               start={dayjs().format('YYYY-MM-DD')}
@@ -278,7 +272,7 @@ class Index extends Component {
                 title='出发日期'
                 value={form.date}
                 placeholder='请选择出发日期'
-              ></PickInput>
+              />
             </Picker>
             <Picker
               mode='time'
@@ -290,7 +284,7 @@ class Index extends Component {
                 title='出发时间'
                 value={form.time}
                 placeholder='请选择出发时间'
-              ></PickInput>
+              />
             </Picker>
             {
               findPeople ?
@@ -306,7 +300,7 @@ class Index extends Component {
                   title='车型'
                   value={carSelector[carSelected] ? carSelector[carSelected].label : ''}
                   placeholder='请选择车型'
-                ></PickInput>
+                />
               </Picker> : ''
             }
             
@@ -321,7 +315,7 @@ class Index extends Component {
                 title={findPeople ? '空位数' : '乘坐人数'}
                 value={countSelector[countSelected]}
                 placeholder={findPeople ? '请选择空位数' : '请选择乘坐人数'}
-              ></PickInput>
+              />
             </Picker>
             <AtInput
               name='price'
@@ -331,7 +325,7 @@ class Index extends Component {
               placeholder='请输入车费(面议)'
               value={form.price}
               onChange={this.onFieldChange.bind(this, 'price')}
-            ></AtInput>
+            />
           </View>
         </View>
         <View className='form-card'>
@@ -361,7 +355,7 @@ class Index extends Component {
                 title='性别'
                 value={sexSelector[sexSelected] ? sexSelector[sexSelected].label : ''}
                 placeholder='请选择性别'
-              ></PickInput>
+              />
             </Picker>
             <AtInput
               required
@@ -372,7 +366,7 @@ class Index extends Component {
               placeholder='请输入手机号码'
               value={form.moblie}
               onChange={this.onFieldChange.bind(this, 'moblie')}
-            ></AtInput>
+            />
           </View>
         </View>
         <View className='form-card'>

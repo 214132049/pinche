@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Navigator } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { AtActivityIndicator, AtDivider } from 'taro-ui'
 import Server from '@/utils/server'
 import { Card, NoData, SearchBar } from '@/components'
@@ -56,7 +56,7 @@ class Index extends Component {
       })
     }
     try {
-      const { data, totalpage } = await Server({
+      const { data } = await Server({
         name: 'get_publish',
         data: {
           pagesize,
@@ -70,7 +70,7 @@ class Index extends Component {
         list: list.concat(data),
         loading: false,
         pageno,
-        loadend: pageno > totalpage
+        loadend: pagesize > data.length
       })
     } catch(e) {
       this.setState({
@@ -125,14 +125,20 @@ class Index extends Component {
         <View className='page-body'>
           {
             list.map(item => {
-              return <Card key={item._id} info={item} onToDetail={this.onToDetail.bind(this, item._id)}></Card>
+              return <Card
+                key={item._id}
+                info={item}
+                onToDetail={this.onToDetail.bind(this, item._id)}
+              />
             })
           }
           {
-            loading ? <AtActivityIndicator mode='center' content='加载中...'></AtActivityIndicator> : ''
+            loading ? <AtActivityIndicator mode='center' content='加载中...' /> : ''
           }
           {
-            loadend ? list.length ? <AtDivider className='divider' fontColor='#ccc' content='我是有底线的'></AtDivider> : <NoData showBtn></NoData> : ''
+            loadend ? list.length ?
+              <AtDivider className='divider' fontColor='#ccc' content='我是有底线的' /> :
+              <NoData showBtn /> : ''
           }
         </View>
       </View>

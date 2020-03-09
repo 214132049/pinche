@@ -21,12 +21,18 @@
       .at-col {
         &:nth-child(1) {
           .tools-item {
-            background-color: #5c99ea;
+            background-color: #fc6639;
+            &.active {
+              box-shadow: 0 0 15px #fc6639;
+            }
           }
         }
         &:nth-child(2) {
           .tools-item {
             background-color: #fba81e;
+            &.active {
+              box-shadow: 0 0 15px #fba81e;
+            }
           }
         }
       }

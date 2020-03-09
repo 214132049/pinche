@@ -10,7 +10,7 @@ export default function SearchBar ({onClick = noop}) {
   return (
     <View className='search-bar'>
       <View className='search-bar_main' onClick={() => _onClick()}>
-        <AtIcon value='search' color='#ccc' size='16'></AtIcon>
+        <AtIcon value='search' color='#ccc' size='16' />
         <Text>起始地/出发日期/车型</Text>
       </View>
     </View>

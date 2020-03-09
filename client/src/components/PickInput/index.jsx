@@ -19,7 +19,7 @@ export default function PickerInput(props) {
           <Text>{value || placeholder}</Text>
         </View>
       </View>
-      <Text className='at-icon at-icon-chevron-right'></Text>
+      <Text className='at-icon at-icon-chevron-right' />
     </View>
   )
 }

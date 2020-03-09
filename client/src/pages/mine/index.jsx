@@ -1,44 +1,31 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtAvatar, AtList, AtListItem } from 'taro-ui'
 
 import './index.scss'
 
-class Index extends Component {
+export default function Mine() {
 
-  componentDidMount () {
-  }
-
-  componentWillUnmount () { }
-
-  config = {
-    navigationBarTitleText: '我的',
-  }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
-  toMinePublish () {
+  function toMinePublish () {
     Taro.navigateTo({
       url: '/pages/mine_publish/index'
     })
   }
 
-  render () {
-    return (
-      <View className='page'>
-        <View className='user-info'>
-          <AtAvatar circle size='large' openData={{ type: 'userAvatarUrl'}}></AtAvatar>
-          <open-data type='userNickName'></open-data>
-        </View>
-        <AtList>
-          <AtListItem title='我的发布' arrow='right' onClick={this.toMinePublish.bind(this)} />
-          <AtListItem title='意见反馈' arrow='right' />
-        </AtList>
+  return (
+    <View className='page'>
+      <View className='user-info'>
+        <AtAvatar circle size='large' openData={{type: 'userAvatarUrl'}} />
+        <open-data type='userNickName' />
       </View>
-    )
-  }
+      <AtList>
+        <AtListItem title='我的发布' arrow='right' onClick={() => toMinePublish()} />
+        {/*<AtListItem title='意见反馈' arrow='right' />*/}
+      </AtList>
+    </View>
+  )
 }
 
-export default Index
+Mine.config = {
+  navigationBarTitleText: '我的',
+}

@@ -23,14 +23,14 @@ exports.main = async (event, context) => {
     if (param.start && param.start.longitude && param.start.latitude) {
       filter.startlocation = _.geoNear({
         geometry: db.Geo.Point(param.start.longitude, param.start.latitude),
-        minDistance: 10,
+        minDistance: 0,
         maxDistance: 10000,
       })
     }
     if (param.end && param.end.longitude && param.end.latitude) {
       filter.endlocation = _.geoNear({
         geometry: db.Geo.Point(param.end.longitude, param.end.latitude),
-        minDistance: 10,
+        minDistance: 0,
         maxDistance: 10000,
       })
     }
@@ -42,19 +42,20 @@ exports.main = async (event, context) => {
     }
 
     if (param.date) {
-      filter.departureTime = _.gt(new Date(`${param.date} 00:00:00 GMT+0800`)).and(_.lt(new Date(`${param.date} 23:59:59 GMT+0800`)))
+      filter.departureTime = _.gt(new Date(`${param.date} 00:00:00 GMT+0800`)).lt(new Date(`${param.date} 23:59:59 GMT+0800`))
     }
 
     const pagesize = param.pagesize || 10 // 每页查询多少条，默认10条
     const pageno = param.pageno || 1 // 当前第几页，默认第一页
-    const { total } = await collection.where(filter).count()
-    const totalpage = Math.ceil(total / pagesize)
+    // const { total } = await collection.where(filter).count()
+    // const totalpage = Math.ceil(total / pagesize)
     const { data } = await collection.where(filter)
+      .orderBy('departureTime', 'desc')
       .orderBy('createtime', 'desc')
       .skip((pageno - 1) * pagesize)
       .limit(pagesize)
       .get()
-    const result = {code: 200, errMsg: '', data, total, totalpage, pageno, pagesize}
+    const result = {code: 200, errMsg: '', data, pageno, pagesize}
     return result
   } catch (error) {
     const result = {code: error.errorCode, errMsg: error.errMsg}

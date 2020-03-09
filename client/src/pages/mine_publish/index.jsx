@@ -16,13 +16,13 @@ class Index extends Component {
     super(props)
     this.state = {
       tools: [
-        { key: 3, title: '人找车', image: car },
-        { key: 4, title: '车找人', image: people },
+        { key: '1', title: '人找车', image: car },
+        { key: '2', title: '车找人', image: people },
       ],
       list: [],
       pagesize: 10,
       pageno: 1,
-      type: '',
+      type: '1',
       loadend: false,
       loading: false
     }
@@ -45,7 +45,7 @@ class Index extends Component {
 
   onPullDownRefresh() {
     Taro.stopPullDownRefresh()
-    this.refreshList('')
+    this.refreshList('1')
   }
 
   onReachBottom() {
@@ -63,7 +63,7 @@ class Index extends Component {
       })
     } 
     try {
-      const { data, totalpage } = await Server({
+      const { data } = await Server({
         name: 'get_publish',
         data: {
           pagesize,
@@ -78,7 +78,7 @@ class Index extends Component {
         list: list.concat(data),
         loading: false,
         pageno,
-        loadend: pageno > totalpage
+        loadend: pagesize > data.length
       })
     } catch(e) {
       this.setState({
@@ -121,18 +121,7 @@ class Index extends Component {
   }
 
   onItemClick (item) {
-    switch(item.key) {
-      case 2:
-        this.toPublish()
-        break
-      case 3:
-      case 4:
-        const type = item.key === 3 ? '1' : '2'
-        this.refreshList(type)
-        break
-      default: 
-        break
-    }
+    this.refreshList(item.key)
   }
 
   refreshList(type) {
@@ -167,7 +156,7 @@ class Index extends Component {
   }
 
   render () {
-    const { tools, list, loading, loadend } = this.state
+    const { tools, list, loading, loadend, type } = this.state
     return (
       <View className='page'>
         <View className='page-header'>
@@ -176,8 +165,11 @@ class Index extends Component {
               tools.map(item => {
                 return (
                   <View className='at-col' key={item.key}>
-                    <View className='tools-item' onClick={this.onItemClick.bind(this, item)}>
-                      <Image src={item.image}></Image>
+                    <View
+                      className={type == item.key ? 'tools-item active' : 'tools-item'}
+                      onClick={this.onItemClick.bind(this, item)}
+                    >
+                      <Image src={item.image} />
                       <Text>{item.title}</Text>
                     </View>
                   </View>
@@ -196,18 +188,20 @@ class Index extends Component {
                 onToDetail={this.onToDetail.bind(this, item._id)}
                 onToDelete={this.onToDelete.bind(this, item._id)}
                 onToEdit={this.onToEdit.bind(this, item)}
-              ></Card>
+              />
             })
           }
           {
-            loading ? <AtActivityIndicator mode='center' content='加载中...'></AtActivityIndicator> : ''
+            loading ? <AtActivityIndicator mode='center' content='加载中...' /> : ''
           }
           {
-            loadend ? list.length ? <AtDivider className='divider' fontColor='#ccc' content='我是有底线的'></AtDivider> : <NoData></NoData> : ''
+            loadend ? list.length ?
+              <AtDivider className='divider' fontColor='#ccc' content='我是有底线的' /> :
+              <NoData /> : ''
           }
         </View>
         <View className='fab-btn' onClick={this.onToPublish}>
-          <Image src={publish}></Image>
+          <Image src={publish} />
           <Text>发布</Text>
         </View>
       </View>

@@ -1,18 +1,12 @@
 import Taro, { useState, useDidShow } from '@tarojs/taro'
-import { View, Picker, Button } from '@tarojs/components'
-import { AtInput, AtButton, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtIcon } from 'taro-ui'
+import { View, Picker, Button, Text } from '@tarojs/components'
+import { AtInput, AtButton, AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
 import dayjs from 'dayjs'
 import QQMapWX from '@/assets/js/qqmap-wx-jssdk'
 import { PickInput } from '@/components'
+import { carSelector, typeSelector } from '@/constants'
 
 import './index.scss'
-
-const carSelector = [
-  {key: '1', label: '轿车'},
-  {key: '2', label: 'SUV'},
-  {key: '3', label: 'MPV'},
-  {key: '4', label: '其他'}
-]
 
 let eventChannel = null
 // 实例化API核心类
@@ -73,6 +67,9 @@ export default function Search () {
     }
     if (prop === 'cartype') {
       value = carSelector[+value].key
+    }
+    if (prop === 'type') {
+      value = typeSelector[+value].key
     }
     updateForm(prop, value)
     return value
@@ -136,9 +133,23 @@ export default function Search () {
   }
 
   let carSelected = carSelector.findIndex(v => v.key == form.cartype)
+  let typeSelected = typeSelector.findIndex(v => v.key == form.type)
   return (
     <View className='search-form'>
       <View className='search-form_body'>
+        <Picker
+          mode='selector'
+          range={typeSelector}
+          rangeKey='label'
+          value={Math.max(typeSelected, 0)}
+          onChange={(e) => onFieldChange(e, 'type')}
+        >
+          <PickInput
+            title='拼车类型'
+            value={typeSelector[typeSelected] ? typeSelector[typeSelected].label : ''}
+            placeholder='请选择车型'
+          />
+        </Picker>
         <AtInput
           name='start'
           title='出发地'
@@ -147,7 +158,9 @@ export default function Search () {
           value={form.start.name}
           onChange={(e) => onFieldChange(e, 'start')}
         >
-          <AtIcon value='map-pin' color='#ccc' onClick={() => onCityClick('start')} />
+          <Text className='at-icon at-icon-map-pin' onClick={() => onCityClick('start')}>
+            地图选点
+          </Text>
         </AtInput>
         <AtInput
           name='end'
@@ -157,7 +170,9 @@ export default function Search () {
           value={form.end.name}
           onChange={(e) => onFieldChange(e, 'end')}
         >
-          <AtIcon value='map-pin' color='#ccc' onClick={() => onCityClick('end')} />
+          <Text className='at-icon at-icon-map-pin' onClick={() => onCityClick('end')}>
+          地图选点
+          </Text>
         </AtInput>
         <Picker
           mode='date'
@@ -169,7 +184,7 @@ export default function Search () {
             title='出发日期'
             value={form.date}
             placeholder='请选择出发日期'
-          ></PickInput>
+          />
         </Picker>
         <Picker
           mode='selector'
@@ -182,7 +197,7 @@ export default function Search () {
             title='车型'
             value={carSelector[carSelected] ? carSelector[carSelected].label : ''}
             placeholder='请选择车型'
-          ></PickInput>
+          />
         </Picker>
         <AtModal isOpened={isOpened}>
           <AtModalHeader>小程序需要获取你的地理位置</AtModalHeader>

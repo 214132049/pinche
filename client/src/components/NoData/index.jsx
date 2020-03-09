@@ -4,7 +4,6 @@ import { AtButton } from 'taro-ui'
 import NodataImage from '@/assets/images/no-data.png'
 
 import './index.scss'
-import { NoData } from '..'
 
 function onToPublish() {
   Taro.switchTab({
@@ -15,10 +14,11 @@ function onToPublish() {
 export default function Nodata({tip, showBtn}) {
   return (
     <View className='no-data'>
-      <Image src={NodataImage}></Image>
+      <Image src={NodataImage} />
       <View className='text'>{tip || '暂时还没有任何拼车信息'}</View>
       {
-        showBtn ? <AtButton className='btn' size='small' type='primary' onClick={onToPublish}>去发布</AtButton> : ''
+        showBtn ?
+          <AtButton className='btn' size='small' type='primary' onClick={onToPublish}>去发布</AtButton> : ''
       }
     </View>
   )

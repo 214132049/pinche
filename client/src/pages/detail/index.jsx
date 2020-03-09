@@ -15,8 +15,8 @@ import './index.scss'
 dayjs.extend(isSameOrAfter)
 
 const types = {
-  1: { label: '人找车', color: '#fc6639', countLabel: '人同行'},
-  2: { label: '车找人', color: '#fba81e', countLabel: '个座位'}
+  1: { label: '人找车', color: '#fc6639', countLabel: '人'},
+  2: { label: '车找人', color: '#fba81e', countLabel: '个'}
 }
 
 const iconStyles = {
@@ -75,96 +75,98 @@ export default function Detail() {
     }
     getDetail()
   }, [router.params.id])
-  let fromEdit = router.params.form == 1
+
   let type = types[detail.type] ? types[detail.type].label : ''
   let countLabel = types[detail.type] ? types[detail.type].countLabel : ''
   let price = !!detail.price ? `¥${detail.price}` : '面议'
   let sexlabel = iconStyles[detail.sex] ? iconStyles[detail.sex].label : ''
   let userName = detail.name ? detail.name[0] : ''
+  let scene = Taro.getLaunchOptionsSync().scene
 
-  if (Object.keys(detail).length === 0) return ''
-  return (
-    <View className={expired ? 'detail expired' : 'detail'}>
-      <View className='detail-header'>
+  return Object.keys(detail).length === 0 ?
+    '' :
+    (
+      <View className={expired ? 'detail expired' : 'detail'}>
+        <View className='detail-header'>
+          {
+            expired ? <View className='expired-icon' /> : ''
+          }
+          <View className='detail-header__city'>
+            <Text className='name'>{detail.start.name}</Text>
+            <View className='arrow'>
+              <AtIcon prefixClass='iconfont' value='arrow' size='28' color='#ffffff' />
+            </View>
+            <Text className='name'>{detail.end.name}</Text>
+          </View>
+          <View className='detail-header__time'>
+            <View>{detail.time} 出发</View>
+            <View>
+              {getDateDes(detail)}
+              <Text className='at-icon at-icon-calendar' />
+            </View>
+          </View>
+        </View>
+        <View className='detail-body'>
+          <View className='detail-body__item'>
+            <Label className='detail-body__item--title'>拼车类型</Label>
+            <View className='detail-body__item--content'>
+              <Text>{type}</Text>
+            </View>
+          </View>
+          <View className='detail-body__item'>
+            <Label className='detail-body__item--title'>车费</Label>
+            <View className='detail-body__item--content'>
+              <Text>{price}</Text>
+            </View>
+          </View>
+          <View className='detail-body__item'>
+            <Label className='detail-body__item--title'>联系人</Label>
+            <View className='detail-body__item--content'>
+              <Text>{userName + sexlabel}</Text>
+            </View>
+          </View>
+          <View className='detail-body__item'>
+            <Label className='detail-body__item--title'>{detail.type == '2' ? '空位数' : '乘坐人数'}</Label>
+            <View className='detail-body__item--content'>
+              <Text>{detail.count + countLabel}</Text>
+            </View>
+          </View>
+          <View className='detail-body__item'>
+            <Label className='detail-body__item--title'>备注</Label>
+            <View className='detail-body__item--content'>
+              <Text>{detail.note}</Text>
+            </View>
+          </View>
+        </View>
         {
-          expired ? <View className='expired-icon'></View> : ''
-        }
-        <View className='detail-header__city'>
-          <Text className='name'>{detail.start.name}</Text>
-          <View className='arrow'>
-            <AtIcon prefixClass='iconfont' value='arrow' size='28' color='#ffffff' />
-          </View>
-          <Text className='name'>{detail.end.name}</Text>
-        </View>
-        <View className='detail-header__time'>
-          <View>{detail.time} 出发</View>
-          <View>
-            {getDateDes(detail)}
-            <Text className='at-icon at-icon-calendar' />
-          </View>
-        </View>
-      </View>
-      <View className='detail-body'>
-        <View className='detail-body__item'>
-          <Label className='detail-body__item--title'>拼车类型</Label>
-          <View className='detail-body__item--content'>
-            <Text>{type}</Text>
-          </View>
-        </View>
-        <View className='detail-body__item'>
-          <Label className='detail-body__item--title'>车费</Label>
-          <View className='detail-body__item--content'>
-            <Text>{price}</Text>
-          </View>
-        </View>
-        <View className='detail-body__item'>
-          <Label className='detail-body__item--title'>联系人</Label>
-          <View className='detail-body__item--content'>
-            <Text>{userName + sexlabel}</Text>
-          </View>
-        </View>
-        <View className='detail-body__item'>
-          <Label className='detail-body__item--title'>{detail.type == '2' ? '空位数' : '乘坐人数'}</Label>
-          <View className='detail-body__item--content'>
-            <Text>{detail.count + countLabel}</Text>
-          </View>
-        </View>
-        <View className='detail-body__item'>
-          <Label className='detail-body__item--title'>备注</Label>
-          <View className='detail-body__item--content'>
-            <Text>{detail.note}</Text>
-          </View>
-        </View>
-      </View>
-      {
-        !expired ? <View>
-          <AtDivider className='divider' fontColor='#ccc' content='快分享给朋友吧'></AtDivider>
+          !expired ? <View>
+            <AtDivider className='divider' fontColor='#ccc' content='快分享给朋友吧' />
             <View className='share-btns'>
               <Button openType='share'>
-                <Image src={weixin}></Image>
+                <Image src={weixin} />
                 <View className='text'>分享给好友</View>
               </Button>
               {/* <Button>
                 <Image src={miniCode}></Image>
               </Button> */}
               <Button onClick={makePhone.bind(this, detail.moblie)}>
-                <Image src={call}></Image>
+                <Image src={call} />
                 <View className='text'>联系Ta</View>
               </Button>
             </View>
           </View> : ''
-      }
-      {
-        !fromEdit ?
-          <View className='home-btn'>
-            <AtButton type='secondary' size='small'
-              onClick={goHomePage}
-            >返回首页</AtButton>
-          </View>
-        : ''
-      }
-    </View>
-  )
+        }
+        {
+          scene ?
+            <View className='home-btn'>
+              <AtButton type='secondary' size='small'
+                onClick={goHomePage}
+              >返回首页</AtButton>
+            </View>
+          : ''
+        }
+      </View>
+    )
 }
 
 Detail.config = {

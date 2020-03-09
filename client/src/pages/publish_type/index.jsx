@@ -17,9 +17,10 @@ export default function PublishType () {
   return (
     <View className='page'>
       <View className='tip'>
-        免责声明：平台发布的所有信息，平台只负责发布、展示，与平台无关，平台不负任何责任。<Navigator url='/pages/statement/index'>点击查看服务协议详情。</Navigator>
+        免责声明：平台发布的所有信息，平台只负责发布、展示，与平台无关，平台不负任何责任。
+        <Navigator url='/pages/statement/index'>点击查看服务协议详情。</Navigator>
       </View>
-      <AtDivider className='divider' fontColor='#ccc' content='请选择您要发布的栏目'></AtDivider>
+      <AtDivider className='divider' fontColor='#ccc' content='请选择您要发布的栏目' />
       <View className='at-row at-row__justify--around tools'>
         {
           tools.map(item => {
@@ -27,7 +28,7 @@ export default function PublishType () {
               <View className='at-col' key={item.key}>
                 <navigator url={`/pages/publish/index?type=${item.key}`} hover-class='none'>
                   <View className='tools-item'>
-                    <Image src={item.image}></Image>
+                    <Image src={item.image} />
                     <Text>{item.title}</Text>
                   </View>
                 </navigator>
