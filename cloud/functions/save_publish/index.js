@@ -65,7 +65,7 @@ exports.main = async (event, context) => {
 
     // copy data
     let data = {}
-    const props = ['type', 'start', 'end', 'date', 'time', 'count', 'price', 'name', 'sex', 'moblie', 'note']
+    const props = ['type', 'start', 'end', 'date', 'time', 'cartype', 'count', 'price', 'name', 'sex', 'moblie', 'note']
     props.forEach(prop => {
       data[prop] = eventData[prop]
     })
