@@ -28,6 +28,11 @@ export default function Search () {
 
   useDidShow(function() {
     eventChannel = this.$scope.getOpenerEventChannel()
+    eventChannel.on('setFromData', function(data) {
+      if (Object.keys(data).length) {
+        setForm(data)
+      }
+    })
   })
 
   function onOpensetting (e) {
@@ -91,12 +96,12 @@ export default function Search () {
       qqmapsdk.geocoder({
         address,
         success: function(res) {
-          const { title, location: {lat, lng} } = res.result
+          const { location: {lat, lng} } = res.result
           if (!lat || !lng) {
             return reject({message: `未匹配到${target}`})
           }
           resolve({
-            name: title,
+            name: address,
             latitude: lat,
             longitude: lng
           })
@@ -106,7 +111,7 @@ export default function Search () {
         }
       })
     })
-    
+
   }
 
   async function onSubmit() {
@@ -122,14 +127,14 @@ export default function Search () {
       _form.start = _form.start.name ? _form.start : ''
       _form.end = _form.end.name ? _form.end : ''
       eventChannel.emit('acceptFormData', { ..._form })
-      Taro.navigateBack()
+      await Taro.navigateBack()
     } catch (error) {
-      Taro.showToast({
+      await Taro.showToast({
         icon: 'none',
         title: error.message
       })
     }
-    
+
   }
 
   let carSelected = carSelector.findIndex(v => v.key == form.cartype)

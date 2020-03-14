@@ -21,17 +21,19 @@ exports.main = async (event, context) => {
       filter.type = param.type
     }
     if (param.start && param.start.longitude && param.start.latitude) {
-      filter.startlocation = _.geoNear({
-        geometry: db.Geo.Point(param.start.longitude, param.start.latitude),
-        minDistance: 0,
-        maxDistance: 10000,
+      filter.startlocation = _.geoWithin({
+        centerSphere: [
+          [param.start.longitude, param.start.latitude],
+          50 / 6378.1,
+        ]
       })
     }
     if (param.end && param.end.longitude && param.end.latitude) {
-      filter.endlocation = _.geoNear({
-        geometry: db.Geo.Point(param.end.longitude, param.end.latitude),
-        minDistance: 0,
-        maxDistance: 10000,
+      filter.endlocation = _.geoWithin({
+        centerSphere: [
+          [param.end.longitude, param.end.latitude],
+          50 / 6378.1,
+        ]
       })
     }
     if (param.ismine) {
@@ -55,10 +57,8 @@ exports.main = async (event, context) => {
       .skip((pageno - 1) * pagesize)
       .limit(pagesize)
       .get()
-    const result = {code: 200, errMsg: '', data, pageno, pagesize}
-    return result
+    return {code: 200, errMsg: '', data, pageno, pagesize}
   } catch (error) {
-    const result = {code: error.errorCode, errMsg: error.errMsg}
-    return result
+    return {code: error.errorCode || -200, errMsg: error.errMsg || error.message}
   }
 }

@@ -85,10 +85,8 @@ exports.main = async (event, context) => {
         createtime: db.serverDate()
       }
     })
-    const result = {code: 200, errMsg: '', id: _id}
-    return result
+    return {code: 200, errMsg: '', id: _id}
   } catch (error) {
-    const result = {code: error.errorCode, errMsg: error.errMsg}
-    return result
+    return {code: error.errorCode || -200, errMsg: error.errMsg || error.message}
   }
 }

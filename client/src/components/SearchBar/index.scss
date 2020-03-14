@@ -1,21 +1,43 @@
 .search-bar {
   box-sizing: border-box;
+  position: relative;
   width: 100%;
   background-color: rgba($color: #fff, $alpha: 0.8);
   padding: 20px 30px;
   &_main {
     display: flex;
     box-sizing: border-box;
-    height: 60px;
-    line-height: 60px;
+    height: 70px;
+    line-height: 70px;
     padding: 0 20px;
     border-radius: 60px;
     background-color: #f7f7f7;
     color: #ccc;
     font-size: 28px;
     align-items: center;
-    at-icon {
+    .at-icon {
       margin-right: 10px;
     }
+    &--value {
+      &.ong {
+        color: #333333;
+        margin-left: 40px;
+      }
+    }
+  }
+  & > .at-icon {
+    position: absolute;
+    top: 50%;
+    right: 44px;
+    width: 30px;
+    height: 30px;
+    padding: 10px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 26px;
+    color: #cccccc;
+    background: #ffffff;
+    border-radius: 50%;
+    transform: translateY(-50%);
   }
 }

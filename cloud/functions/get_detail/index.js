@@ -23,10 +23,8 @@ exports.main = async (event, context) => {
     if (data.length !== 1) {
       throw new Error('没有查到')
     }
-    const result = {code: 200, errMsg: '', data: data[0] }
-    return result
+    return {code: 200, errMsg: '', data: data[0]}
   } catch (error) {
-    const result = {code: error.errorCode || -200, errMsg: error.errMsg}
-    return result
+    return {code: error.errorCode || -200, errMsg: error.errMsg || error.message}
   }
 }

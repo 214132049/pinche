@@ -17,7 +17,8 @@ class Index extends Component {
       pageno: 1,
       filters: {},
       loadend: false,
-      loading: false
+      loading: false,
+      searchValue: {}
     }
   }
 
@@ -65,7 +66,7 @@ class Index extends Component {
         },
         noloading: true
       })
-      pageno = pageno + 1 
+      pageno = pageno + 1
       this.setState({
         list: list.concat(data),
         loading: false,
@@ -104,23 +105,40 @@ class Index extends Component {
     }, () => this.onGetPublishMessage())
   }
 
+  onClearSearch () {
+    this.setState({
+      searchValue: {}
+    })
+    this.refreshList()
+  }
+
   toSearch() {
     Taro.navigateTo({
       url: '/pages/search/index',
       events: {
         acceptFormData: (data) => {
+          this.setState({
+            searchValue: data
+          })
           this.refreshList(data)
         }
+      },
+      success: (res) => {
+        res.eventChannel.emit('setFromData', this.state.searchValue)
       }
     })
   }
 
   render () {
-    const { list, loading, loadend } = this.state
+    const { list, loading, loadend, searchValue } = this.state
     return (
       <View className='page'>
         <View className='page-header'>
-          <SearchBar onClick={this.toSearch.bind(this)} />
+          <SearchBar
+            onClick={this.toSearch.bind(this)}
+            onClear={this.onClearSearch.bind(this)}
+            value={searchValue}
+          />
         </View>
         <View className='page-body'>
           {

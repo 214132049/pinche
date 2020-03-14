@@ -20,7 +20,7 @@ export default async function({name, data = {}, loadingTitle = '', noloading = f
     }
     logger.info({callFunctionName: name, callFunctionResult: res})
     const result = res.result
-    return result.code == 200 ? Promise.resolve(result) : Promise.reject(result)
+    return result.code === 200 ? Promise.resolve(result) : Promise.reject(result)
   } catch (error) {
     logger.info({callFunctionName: name, callFunctionError: error})
     if (!noloading) {

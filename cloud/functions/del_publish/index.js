@@ -20,10 +20,8 @@ exports.main = async (event, context) => {
         valid: false
       }
     })
-    const result = {code: 200, errMsg: ''}
-    return result
+    return {code: 200, errMsg: ''}
   } catch (error) {
-    const result = {code: error.errorCode, errMsg: error.errMsg}
-    return result
+    return {code: error.errorCode || -200, errMsg: error.errMsg || error.message}
   }
 }

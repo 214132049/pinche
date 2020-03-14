@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import Server from '@/utils/server'
 import getDateDes from '@/utils/date'
+import { carSelector } from '@/constants'
 
 import weixin from '@/assets/images/weixin.png'
 // import miniCode from '@/assets/images/mini_code.png'
@@ -82,6 +83,7 @@ export default function Detail() {
   let sexlabel = iconStyles[detail.sex] ? iconStyles[detail.sex].label : ''
   let userName = detail.name ? detail.name[0] : ''
   let scene = Taro.getLaunchOptionsSync().scene
+  let cartype = carSelector.find(v => v.key === detail.type) || {}
 
   return Object.keys(detail).length === 0 ?
     '' :
@@ -125,18 +127,31 @@ export default function Detail() {
               <Text>{userName + sexlabel}</Text>
             </View>
           </View>
+          {
+            detail.type === '2' ? <View className='detail-body__item'>
+              <Label className='detail-body__item--title'>车型</Label>
+              <View className='detail-body__item--content'>
+                <Text>{cartype.label}</Text>
+              </View>
+            </View> : ''
+          }
           <View className='detail-body__item'>
-            <Label className='detail-body__item--title'>{detail.type == '2' ? '空位数' : '乘坐人数'}</Label>
+            <Label className='detail-body__item--title'>
+              {detail.type === '2' ? '空位数' : '乘坐人数'}
+            </Label>
             <View className='detail-body__item--content'>
               <Text>{detail.count + countLabel}</Text>
             </View>
           </View>
-          <View className='detail-body__item'>
-            <Label className='detail-body__item--title'>备注</Label>
-            <View className='detail-body__item--content'>
-              <Text>{detail.note}</Text>
-            </View>
-          </View>
+          {
+            detail.note ? <View className='detail-body__item'>
+              <Label className='detail-body__item--title'>备注</Label>
+              <View className='detail-body__item--content'>
+                <Text>{detail.note}</Text>
+              </View>
+            </View> : ''
+          }
+
         </View>
         {
           !expired ? <View>
