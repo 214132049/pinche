@@ -62,7 +62,7 @@ exports.main = async (event, context) => {
     await validator.validate(eventData).catch(e => {
       return Promise.reject({errorCode: -200, errMsg: e.errors[0].message})
     })
-
+    const editId = eventData['_id']
     // copy data
     let data = {}
     const props = ['type', 'start', 'end', 'date', 'time', 'cartype', 'count', 'price', 'name', 'sex', 'moblie', 'note']
@@ -70,9 +70,16 @@ exports.main = async (event, context) => {
       data[prop] = eventData[prop]
     })
     if (data.note.trim()) {
+      console.log(data.note)
       await cloud.openapi.customerServiceMessage.send({
+        touser: wxContext.OPENID,
         content: data.note
-      }).catch(e => Promise.reject({errorCode: -200, errMsg: '备注含有违法违规内容'}))
+      }).catch(e => {
+        if (e.errCode === 87014) {
+          return Promise.reject({errorCode: -200, errMsg: '备注含有违法违规内容'})
+        }
+        return Promise.resolve()
+      })
     }
     data.top = false // 置顶
     data.valid = true // 是否有效
@@ -83,14 +90,31 @@ exports.main = async (event, context) => {
     data.appid = wxContext.APPID
     data.unionid = wxContext.UNIONID
 
-    // insert data
-    const { _id } = await db.collection('pinche_messages').add({
-      data: {
-        ...data,
-        createtime: db.serverDate()
-      }
-    })
-    return {code: 200, errMsg: '', id: _id}
+    let backId = ''
+    if (editId) {
+      await db.collection('pinche_messages')
+        .where({
+          _id: editId
+        }).update({
+          data: {
+            ...data,
+            updatetime: db.serverDate()
+          }
+        })
+      backId = editId
+    } else {
+      // insert data
+      const { _id } = await db.collection('pinche_messages').add({
+        data: {
+          ...data,
+          createtime: db.serverDate(),
+          updatetime: db.serverDate()
+        }
+      })
+      backId = _id
+    }
+
+    return {code: 200, errMsg: '', id: backId}
   } catch (error) {
     return {code: error.errorCode || -200, errMsg: error.errMsg || error.message}
   }

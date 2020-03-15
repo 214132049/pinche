@@ -40,6 +40,9 @@ class Index extends Component {
   onPullDownRefresh() {
     Taro.stopPullDownRefresh()
     this.refreshList()
+    this.setState({
+      searchValue: {}
+    })
   }
 
   onReachBottom() {

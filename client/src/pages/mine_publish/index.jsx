@@ -103,9 +103,10 @@ class Index extends Component {
     })
   }
 
-  onToEdit({id, type}) {
+  onToEdit({_id, type}) {
+    console.log(_id)
     Taro.navigateTo({
-      url: `/pages/publish/index?id=${id}&type=${type}`
+      url: `/pages/publish/index?id=${_id}&type=${type}`
     })
   }
 

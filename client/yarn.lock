@@ -9825,6 +9825,13 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
+widget-ui@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/widget-ui/download/widget-ui-1.0.2.tgz#d65a560b91739fbd0ea7c2f5f2d28fe4c0132470"
+  integrity sha1-1lpWC5Fzn70Op8L18tKP5MATJHA=
+  dependencies:
+    eventemitter3 "^4.0.0"
+
 word-wrap@~1.2.3:
   version "1.2.3"
   resolved "https://registry.npm.taobao.org/word-wrap/download/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
@@ -9872,6 +9879,13 @@ write@^0.2.1:
   integrity sha1-X8A4KOJkzqP+kUVUdvejxWbLB1c=
   dependencies:
     mkdirp "^0.5.1"
+
+wxml-to-canvas@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npm.taobao.org/wxml-to-canvas/download/wxml-to-canvas-1.0.3.tgz#5a12b2430cd9aba6cc9a09b108a3b4d02e0ae388"
+  integrity sha1-WhKyQwzZq6bMmgmxCKO00C4K44g=
+  dependencies:
+    widget-ui "^1.0.2"
 
 x-is-string@^0.1.0:
   version "0.1.0"

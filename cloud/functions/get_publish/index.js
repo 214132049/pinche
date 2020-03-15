@@ -24,7 +24,7 @@ exports.main = async (event, context) => {
       filter.startlocation = _.geoWithin({
         centerSphere: [
           [param.start.longitude, param.start.latitude],
-          50 / 6378.1,
+          30 / 6378.1,
         ]
       })
     }
@@ -32,7 +32,7 @@ exports.main = async (event, context) => {
       filter.endlocation = _.geoWithin({
         centerSphere: [
           [param.end.longitude, param.end.latitude],
-          50 / 6378.1,
+          30 / 6378.1,
         ]
       })
     }
@@ -53,7 +53,7 @@ exports.main = async (event, context) => {
     // const totalpage = Math.ceil(total / pagesize)
     const { data } = await collection.where(filter)
       .orderBy('departureTime', 'desc')
-      .orderBy('createtime', 'desc')
+      .orderBy('updatetime', 'desc')
       .skip((pageno - 1) * pagesize)
       .limit(pagesize)
       .get()

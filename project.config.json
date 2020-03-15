@@ -15,6 +15,7 @@
 		"autoAudits": false,
 		"showShadowRootInWxmlPanel": false,
 		"scopeDataCheck": true,
+		"uglifyFileName": true,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -22,8 +23,7 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		},
-		"uglifyFileName": true
+		}
 	},
 	"compileType": "miniprogram",
 	"simulatorType": "wechat",

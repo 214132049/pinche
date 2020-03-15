@@ -17,10 +17,17 @@ export default function Mine() {
         </Navigator>
         <Button
           className='contact-button'
-          openType='contact'
+          openType='feedback'
           sessionFrom='feedback'
         >
           <AtListItem title='意见反馈' arrow='right' />
+        </Button>
+        <Button
+          className='contact-button'
+          openType='contact'
+          sessionFrom='contact'
+        >
+          <AtListItem title='联系客服' arrow='right' />
         </Button>
       </AtList>
     </View>

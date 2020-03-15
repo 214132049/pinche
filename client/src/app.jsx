@@ -30,7 +30,7 @@ class App extends Component {
       'pages/search/index'
     ],
     window: {
-      backgroundTextStyle: 'light',
+      backgroundTextStyle: 'dark',
       navigationBarBackgroundColor: '#2577e3',
       navigationBarTitleText: '周沪拼车',
       navigationBarTextStyle: 'white'

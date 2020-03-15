@@ -93,12 +93,24 @@ class Index extends Component {
     this.formValidator = null
   }
 
+  componentWillMount() {
+    let { type } = this.$router.params
+    let findPeople = type === '2'
+    Taro.setNavigationBarTitle({
+      title: `发布${findPeople ? '找乘客' : '找车主'}信息`
+    })
+    Taro.setNavigationBarColor({
+      frontColor: '#ffffff',
+      backgroundColor: findPeople ? '#fba81e' : '#ff411e'
+    })
+  }
+
   componentDidMount () {
     let { type, id } = this.$router.params
     this.formValidator = new schema(descriptor)
     this.updateForm('type', type)
     if (id) {
-      console.log('edit')
+      this.getDetail(id)
     }
   }
 
@@ -192,6 +204,25 @@ class Index extends Component {
     this.setState({
       checked: !!e.detail.value[0]
     })
+  }
+
+  async getDetail (id) {
+    try {
+      const { data } = await Server({
+        name: 'get_detail',
+        data: {
+          id
+        }
+      })
+      this.setState({
+        form: { ...data }
+      })
+    } catch (error) {
+      Taro.showToast({
+        icon: 'none',
+        title: '加载失败，请重试'
+      })
+    }
   }
 
   async onSubmit() {
@@ -327,8 +358,8 @@ class Index extends Component {
               name='price'
               title='车费'
               type='phone'
-              maxLength='11'
-              placeholder='请输入车费(面议)'
+              maxLength='10'
+              placeholder='请输入车费(不填则面议)'
               value={form.price}
               onChange={this.onFieldChange.bind(this, 'price')}
             />

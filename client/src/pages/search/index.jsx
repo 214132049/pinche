@@ -104,7 +104,7 @@ export default function Search () {
         success: function(res) {
           const { location: {lat, lng} } = res.result
           if (!lat || !lng) {
-            return reject({message: `未匹配到${target}`})
+            return reject({message: `未匹配到${target},请输入详细地址`})
           }
           resolve({
             name: address,
@@ -112,8 +112,9 @@ export default function Search () {
             longitude: lng
           })
         },
-        fail: function() {
-          reject({message: `未匹配到${target}`})
+        fail: function(e) {
+          console.log(e)
+          reject({message: `未匹配到${target}，请输入详细地址`})
         }
       })
     })

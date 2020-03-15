@@ -21,7 +21,7 @@ exports.main = async (event, context) => {
       valid: true
     }).get()
     if (data.length !== 1) {
-      throw new Error('没有查到')
+      throw new Error('暂无数据')
     }
     return {code: 200, errMsg: '', data: data[0]}
   } catch (error) {

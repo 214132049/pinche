@@ -6,24 +6,42 @@ page {
     position: relative;
     background: #2577e3;
     color: #ffffff;
-    padding: 40px;
+    padding: 20px;
     &__city {
       display: flex;
       justify-content: center;
       text-align: center;
       align-items: center;
-      .arrow {
+      height: 150px;
+      .iconfont-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 160px;
-        height: 40px;
+        height: 100%;
+        font-size: 60px;
+        margin: 0 20px;
+        color: #FFFFFF;
       }
       .name {
         flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
       }
     }
     &__time {
       text-align: center;
-      margin-top: 50px;
+      margin-top: 10px;
+      height: 100px;
+      .item {
+        height: 50px;
+        line-height: 50px;
+      }
       .at-icon {
+        width: 30px;
+        height: 30px;
         vertical-align: middle;
         font-size: 28px;
         margin-left: 10px;
@@ -74,7 +92,7 @@ page {
         border: 0;
       }
       .text {
-        margin-top: 20px;
+        margin-top: 30px;
         font-size: 24px;
       }
     }
@@ -94,6 +112,53 @@ page {
     color: #ccc !important;
     .detail-body__item--title {
       color: #ccc;
+    }
+  }
+  #canvas {
+    visibility: hidden;
+    width: 100px !important;
+    height: 1px;
+  }
+  .share-image-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    .share-image-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      transform: translate3d(-50%, -50%, 0);
+      overflow: hidden;
+      padding: 20px;
+      .image {
+        display: block;
+        width: 100%;
+        height: 100px;
+      }
+      .at-button {
+        margin-top: 30px;
+      }
+      .at-icon-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
+        padding: 10px;
+        line-height: 30px;
+        text-align: center;
+        font-size: 26px;
+        color: #FFFFFF;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 50%;
+      }
     }
   }
 }

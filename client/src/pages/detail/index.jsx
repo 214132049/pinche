@@ -1,6 +1,7 @@
-import Taro, { useShareAppMessage, useEffect, useState, useRouter } from '@tarojs/taro'
-import { View, Text, Image, Button, Label } from '@tarojs/components'
+import Taro, { useShareAppMessage, useEffect, useState, useRouter, useRef } from '@tarojs/taro'
+import { View, Text, Image, Button, Label, CoverView } from '@tarojs/components'
 import { AtDivider, AtIcon, AtButton } from 'taro-ui'
+import wxmlToCanvas from 'wxml-to-canvas'
 import dayjs from 'dayjs'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import Server from '@/utils/server'
@@ -8,10 +9,11 @@ import getDateDes from '@/utils/date'
 import { carSelector } from '@/constants'
 
 import weixin from '@/assets/images/weixin.png'
-// import miniCode from '@/assets/images/mini_code.png'
+import miniCode from '@/assets/images/mini_code.png'
 import call from '@/assets/images/call.png'
 
 import './index.scss'
+import createWxmlAndStyle from './share'
 
 dayjs.extend(isSameOrAfter)
 
@@ -38,10 +40,13 @@ function goHomePage() {
 }
 
 export default function Detail() {
-
+  const qrcodeRef = useRef(null);
   const [detail, setDetail] = useState({})
+  const [shareImage, setShareImage] = useState('')
   const [expired, setExpired] = useState(false)
+  const [shareModalOpened, setShareModalOpened] = useState(false)
   const router = useRouter()
+  const sharePage = `/pages/detail/index?id=${router.params.id}&from=share`
 
   useShareAppMessage(res => {
     if (res.from === 'button') {
@@ -50,7 +55,7 @@ export default function Detail() {
     }
     return {
       title: '我发布一个拼车信息，快来一起出发吧！',
-      path: `/pages/detail/index?id=${router.params.id}&from=share`
+      path: sharePage
     }
   })
 
@@ -77,11 +82,53 @@ export default function Detail() {
     getDetail()
   }, [router.params.id])
 
+  async function getQrCode() {
+    try {
+      const { data } = await Server({
+        name: 'get_qrcode',
+        data: {
+          path: sharePage
+        }
+      })
+      console.log(data)
+
+    } catch (e) {
+      Taro.showToast({
+        icon: 'none',
+        title: '获取失败，请重试'
+      })
+    }
+  }
+
+  function toggleShareModal(res) {
+    setShareModalOpened(res)
+  }
+
+  function getQrCodeUrl (data) {
+    const arrayBuffer = new Uint8Array(data.buffer)
+    const base64 = Taro.arrayBufferToBase64(arrayBuffer)
+  }
+
+  async function createShareImage () {
+    let { wxml, style } = createWxmlAndStyle(detail)
+    let res = await qrcodeRef.current.renderToCanvas({ wxml, style })
+    console.log(res)
+    await toggleShareModal(true)
+  }
+
+  async function exportShareImage () {
+    let {tempFilePath} = await qrcodeRef.current.canvasToTempFilePath()
+    console.log(tempFilePath)
+    await setShareImage(tempFilePath)
+  }
+
   let type = types[detail.type] ? types[detail.type].label : ''
   let countLabel = types[detail.type] ? types[detail.type].countLabel : ''
   let price = !!detail.price ? `¥${detail.price}` : '面议'
   let sexlabel = iconStyles[detail.sex] ? iconStyles[detail.sex].label : ''
   let userName = detail.name ? detail.name[0] : ''
+  let start = detail.start ? detail.start.name : ''
+  let end = detail.end ? detail.end.name : ''
   // let scene = Taro.getLaunchOptionsSync().scene
   let fromShare = router.params.from === 'share'
   let cartype = carSelector.find(v => v.key === detail.type) || {}
@@ -94,15 +141,13 @@ export default function Detail() {
             expired ? <View className='expired-icon' /> : ''
           }
           <View className='detail-header__city'>
-            <Text className='name'>{detail.start.name}</Text>
-            <View className='arrow'>
-              <AtIcon prefixClass='iconfont' value='arrow' size='28' color='#ffffff' />
-            </View>
-            <Text className='name'>{detail.end.name}</Text>
+            <Text className='name'>{start}</Text>
+            <Text className='iconfont iconfont-arrow' />
+            <Text className='name'>{end}</Text>
           </View>
           <View className='detail-header__time'>
-            <View>{detail.time} 出发</View>
-            <View>
+            <View className='item'>{detail.time} 出发</View>
+            <View className='item'>
               {getDateDes(detail)}
               <Text className='at-icon at-icon-calendar' />
             </View>
@@ -161,9 +206,10 @@ export default function Detail() {
                 <Image src={weixin} />
                 <View className='text'>分享给好友</View>
               </Button>
-              {/* <Button>
-                <Image src={miniCode}></Image>
-              </Button> */}
+              <Button onClick={createShareImage}>
+                <Image src={miniCode} />
+                <View className='text'>分享二维码</View>
+              </Button>
               <Button onClick={makePhone.bind(this, detail.moblie)}>
                 <Image src={call} />
                 <View className='text'>联系Ta</View>
@@ -180,10 +226,20 @@ export default function Detail() {
             </View>
           : ''
         }
+        <View
+          className='share-image-box'
+          style={{ left: shareModalOpened ? '0' : '-200%'}}
+        >
+          <View className='share-image-content'>
+            <wxmlToCanvas className='widget' width='298' height='350' ref={qrcodeRef} />
+            <AtButton type='primary' onClick={exportShareImage}>保存到本地</AtButton>
+            <View className='at-icon at-icon-close' onClick={() => toggleShareModal(false)} />
+          </View>
+        </View>
       </View>
     )
 }
 
 Detail.config = {
-  navigationBarTitleText: '详情'
+  navigationBarTitleText: '详情',
 }

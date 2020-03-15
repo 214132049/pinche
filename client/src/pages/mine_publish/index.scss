@@ -22,16 +22,20 @@
         &:nth-child(1) {
           .tools-item {
             background-color: #fc6639;
+            opacity: 0.8;
             &.active {
-              box-shadow: 0 0 15px #fc6639;
+              opacity: 1;
+              box-shadow: 0 0 16px #fc6639;
             }
           }
         }
         &:nth-child(2) {
           .tools-item {
             background-color: #fba81e;
+            opacity: 0.8;
             &.active {
-              box-shadow: 0 0 15px #fba81e;
+              opacity: 1;
+              box-shadow: 0 0 16px #fba81e;
             }
           }
         }
