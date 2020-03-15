@@ -1,0 +1,12 @@
+{
+  "rules":[{
+    "action": "allow",
+    "page": "path/index/index"
+  }, {
+    "action": "allow",
+    "page": "path/detail/index"
+  },{
+    "action": "disallow",
+    "page": "*"
+  }]
+}

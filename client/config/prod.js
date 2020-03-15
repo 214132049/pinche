@@ -3,6 +3,7 @@ module.exports = {
     NODE_ENV: '"production"'
   },
   defineConstants: {
+    ENV_ID: '"dev-b61475"'
   },
   mini: {},
   h5: {

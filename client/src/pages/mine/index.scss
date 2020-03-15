@@ -12,4 +12,12 @@
       margin-bottom: 20px;
     }
   }
+  .contact-button {
+    padding: 0;
+    background: transparent;
+    text-align: inherit;
+    &::after {
+      border: 0;
+    }
+  }
 }

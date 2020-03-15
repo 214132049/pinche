@@ -64,7 +64,7 @@ class Index extends Component {
           pageno,
           ...filters
         },
-        noloading: true
+        noloading: !!list.length
       })
       pageno = pageno + 1
       this.setState({
@@ -151,7 +151,7 @@ class Index extends Component {
             })
           }
           {
-            loading ? <AtActivityIndicator mode='center' content='加载中...' /> : ''
+            loading && list.length ? <AtActivityIndicator mode='center' content='加载中...' /> : ''
           }
           {
             loadend ? list.length ?

@@ -15,14 +15,16 @@ var qqmapsdk = new QQMapWX({
 });
 let currentCity = ''
 
+const initForm = {
+  type: '',
+  start: {},
+  end: {},
+  cartype: '',
+  date: ''
+}
+
 export default function Search () {
-  const [form, setForm] = useState({
-    type: '',
-    start: {},
-    end: {},
-    cartype: '',
-    date: ''
-  })
+  const [form, setForm] = useState(initForm)
   const [isOpened, setIsOpened] = useState(false)
   // const [currentCity, setCurrentCity] = useState('start')
 
@@ -84,6 +86,10 @@ export default function Search () {
     Taro.chooseLocation().then(({name, longitude, latitude}) => {
       updateForm(currentCity, {name, longitude, latitude})
     })
+  }
+
+  function onReset() {
+    setForm(initForm)
   }
 
   function updateForm (prop, value) {
@@ -191,19 +197,21 @@ export default function Search () {
             placeholder='请选择出发日期'
           />
         </Picker>
-        <Picker
-          mode='selector'
-          range={carSelector}
-          rangeKey='label'
-          value={Math.max(carSelected, 0)}
-          onChange={(e) => onFieldChange(e, 'cartype')}
-        >
-          <PickInput
-            title='车型'
-            value={carSelector[carSelected] ? carSelector[carSelected].label : ''}
-            placeholder='请选择车型'
-          />
-        </Picker>
+        {
+          form.type === '1' ?<Picker
+            mode='selector'
+            range={carSelector}
+            rangeKey='label'
+            value={Math.max(carSelected, 0)}
+            onChange={(e) => onFieldChange(e, 'cartype')}
+          >
+            <PickInput
+              title='车型'
+              value={carSelector[carSelected] ? carSelector[carSelected].label : ''}
+              placeholder='请选择车型'
+            />
+          </Picker> : ''
+        }
         <AtModal isOpened={isOpened}>
           <AtModalHeader>小程序需要获取你的地理位置</AtModalHeader>
           <AtModalContent>
@@ -216,7 +224,8 @@ export default function Search () {
         </AtModal>
       </View>
       <View className='search-form_btn'>
-        <AtButton type='primary' onClick={onSubmit}>搜 索</AtButton>
+        <AtButton type='primary' onClick={onSubmit} className='btn'>搜 索</AtButton>
+        <AtButton type='secondary' onClick={onReset} className='btn'>重 置</AtButton>
       </View>
     </View>
   )

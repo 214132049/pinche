@@ -8,8 +8,8 @@ export const carSelector = [
 ]
 
 export const typeSelector = [
-  { key: '1', label: '人找车' },
-  { key: '2', label: '车找人' }
+  { key: '1', label: '找车主' },
+  { key: '2', label: '找乘客' }
 ]
 
 export const sexSelector = [

@@ -32,12 +32,26 @@ function getSearchText(sourceObj) {
   return Object.values(obj)
 }
 
+function filter(sourceObj) {
+  let cloneObj = {}
+  let keys = Object.keys(sourceObj)
+  keys.forEach(key => {
+    let value = sourceObj[key]
+    if (value || (typeof value === 'object' && Object.keys(value).length)) {
+      cloneObj[key] = value
+    }
+  })
+  return cloneObj
+}
+
 function SearchBar ({onClick = noop, onClear = noop, value: searchValue = {}}) {
   const _onClick = onClick || noop
   const _onClear = onClear || noop
-  let keys = Object.keys(searchValue)
-  let searchText = keys.length ? getSearchText(searchValue) : initSearchText
-  console.log(keys.length)
+  let _searchValue = filter(searchValue)
+  let keys = Object.keys(_searchValue)
+  let searchText = keys.length ? getSearchText(_searchValue) : initSearchText
+  let className = !!keys.length ? 'search-bar_main--value' : 'search-bar_main--placeholder'
+
   return (
     <View className='search-bar'>
       <View className='search-bar_main' onClick={() => _onClick()}>
@@ -45,7 +59,7 @@ function SearchBar ({onClick = noop, onClear = noop, value: searchValue = {}}) {
           !keys.length ? <Text className='at-icon at-icon-search' /> : ''
         }
         <Text
-          className={keys.length ? 'search-bar_main--value ong' : 'search-bar_main--value'}
+          className={className}
         >
           {searchText.filter(t => t).join('/')}
         </Text>

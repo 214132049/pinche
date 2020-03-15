@@ -10,8 +10,8 @@ import './index.scss'
 dayjs.extend(isSameOrAfter)
 
 const types = {
-  1: { label: '人找车', color: '#fc6639', countLabel: '人同行'},
-  2: { label: '车找人', color: '#fba81e', countLabel: '个座位'}
+  1: { label: '找车主', color: '#fc6639', countLabel: '人同行'},
+  2: { label: '找乘客', color: '#fba81e', countLabel: '个座位'}
 }
 
 const iconStyles = {

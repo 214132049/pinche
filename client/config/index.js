@@ -43,6 +43,11 @@ const config = {
   defineConstants: {
     IS_PRO: process.env.NODE_ENV === 'production'
   },
+  copy: {
+    patterns: [
+      { from: 'src/sitemap.json', to: 'dist/sitemap.json' }
+    ]
+  },
   mini: {
     postcss: {
       autoprefixer: {

@@ -69,6 +69,11 @@ exports.main = async (event, context) => {
     props.forEach(prop => {
       data[prop] = eventData[prop]
     })
+    if (data.note.trim()) {
+      await cloud.openapi.customerServiceMessage.send({
+        content: data.note
+      }).catch(e => Promise.reject({errorCode: -200, errMsg: '备注含有违法违规内容'}))
+    }
     data.top = false // 置顶
     data.valid = true // 是否有效
     data.departureTime = new Date(`${data.date} ${data.time} GMT+0800`) // 出发时间

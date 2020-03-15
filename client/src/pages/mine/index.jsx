@@ -1,17 +1,10 @@
 import Taro from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Button, Navigator } from '@tarojs/components'
 import { AtAvatar, AtList, AtListItem } from 'taro-ui'
 
 import './index.scss'
 
 export default function Mine() {
-
-  function toMinePublish () {
-    Taro.navigateTo({
-      url: '/pages/mine_publish/index'
-    })
-  }
-
   return (
     <View className='page'>
       <View className='user-info'>
@@ -19,8 +12,16 @@ export default function Mine() {
         <open-data type='userNickName' />
       </View>
       <AtList>
-        <AtListItem title='我的发布' arrow='right' onClick={() => toMinePublish()} />
-        {/*<AtListItem title='意见反馈' arrow='right' />*/}
+        <Navigator url='/pages/mine_publish/index'>
+          <AtListItem title='我的发布' arrow='right' />
+        </Navigator>
+        <Button
+          className='contact-button'
+          openType='contact'
+          sessionFrom='feedback'
+        >
+          <AtListItem title='意见反馈' arrow='right' />
+        </Button>
       </AtList>
     </View>
   )

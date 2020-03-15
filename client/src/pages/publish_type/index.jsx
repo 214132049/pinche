@@ -10,8 +10,8 @@ import './index.scss'
 export default function PublishType () {
 
   let tools = [
-    { key: 1, title: '人找车', image: car },
-    { key: 2, title: '车找人', image: people },
+    { key: 1, title: '找车主', image: car },
+    { key: 2, title: '找乘客', image: people },
   ]
 
   return (

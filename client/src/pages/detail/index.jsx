@@ -16,8 +16,8 @@ import './index.scss'
 dayjs.extend(isSameOrAfter)
 
 const types = {
-  1: { label: '人找车', color: '#fc6639', countLabel: '人'},
-  2: { label: '车找人', color: '#fba81e', countLabel: '个'}
+  1: { label: '找车主', color: '#fc6639', countLabel: '人'},
+  2: { label: '找乘客', color: '#fba81e', countLabel: '个'}
 }
 
 const iconStyles = {
@@ -50,7 +50,7 @@ export default function Detail() {
     }
     return {
       title: '我发布一个拼车信息，快来一起出发吧！',
-      path: `/pages/detail/index?id=${router.params.id}`
+      path: `/pages/detail/index?id=${router.params.id}&from=share`
     }
   })
 
@@ -82,9 +82,9 @@ export default function Detail() {
   let price = !!detail.price ? `¥${detail.price}` : '面议'
   let sexlabel = iconStyles[detail.sex] ? iconStyles[detail.sex].label : ''
   let userName = detail.name ? detail.name[0] : ''
-  let scene = Taro.getLaunchOptionsSync().scene
+  // let scene = Taro.getLaunchOptionsSync().scene
+  let fromShare = router.params.from === 'share'
   let cartype = carSelector.find(v => v.key === detail.type) || {}
-
   return Object.keys(detail).length === 0 ?
     '' :
     (
@@ -172,7 +172,7 @@ export default function Detail() {
           </View> : ''
         }
         {
-          scene ?
+          fromShare ?
             <View className='home-btn'>
               <AtButton type='secondary' size='small'
                 onClick={goHomePage}

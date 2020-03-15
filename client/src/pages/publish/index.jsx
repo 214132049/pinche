@@ -59,21 +59,25 @@ const descriptor = {
   }
 }
 
-const initForm = {
-  type: '', // 信息类型
-  start: {}, // 出发地
-  end: {}, // 目的地
-  date: dayjs().format('YYYY-MM-DD'),
-  time: dayjs().format('HH:mm'),
-  cartype: '',
-  count: '',
-  price: '',
-  name: '',
-  sex: '',
-  moblie: '',
-  note: '',
-  agreement: false
+function initForm() {
+  const date = dayjs().add(30, 'm')
+  return {
+    type: '', // 信息类型
+    start: {}, // 出发地
+    end: {}, // 目的地
+    date: date.format('YYYY-MM-DD'),
+    time: date.format('HH:mm'),
+    cartype: '',
+    count: '',
+    price: '',
+    name: '',
+    sex: '',
+    moblie: '',
+    note: '',
+    agreement: false
+  }
 }
+
 
 class Index extends Component {
 
@@ -84,7 +88,7 @@ class Index extends Component {
       isOpened: false,
       checked: false,
       currentCity: 'start',
-      form: { ...initForm }
+      form: { ...initForm() }
     }
     this.formValidator = null
   }
@@ -101,7 +105,7 @@ class Index extends Component {
   componentWillUnmount () { }
 
   config = {
-    navigationBarTitleText: '拼车信息'
+    navigationBarTitleText: '发布拼车信息'
   }
 
   componentDidShow () {
@@ -127,7 +131,7 @@ class Index extends Component {
       this.closeModal()
     }
   }
-  
+
   async onCityClick(prop) {
     this.setState({
       currentCity: prop
@@ -200,7 +204,7 @@ class Index extends Component {
       })
       this.setState({
         checked: false,
-        form: { ...initForm }
+        form: { ...initForm() }
       })
       await Taro.showToast({
         icon: 'success',
@@ -213,7 +217,7 @@ class Index extends Component {
       const error = e.errors ? e.errors[0] : e
       Taro.showToast({
         icon: 'none',
-        title: error.message
+        title: error.message || error.errMsg
       })
     }
   }
@@ -232,7 +236,7 @@ class Index extends Component {
               title='拼车类型'
               type='text'
               editable={false}
-              value={findPeople ? '车找人' : '人找车'}
+              value={findPeople ? '找乘客' : '找车主'}
             />
           </View>
         </View>
@@ -277,6 +281,8 @@ class Index extends Component {
             <Picker
               mode='time'
               value={form.time}
+              start={form.time}
+              end='23:59'
               onChange={this.onFieldChange.bind(this, 'time')}
             >
               <PickInput
@@ -303,7 +309,7 @@ class Index extends Component {
                 />
               </Picker> : ''
             }
-            
+
             <Picker
               mode='selector'
               range={countSelector}

@@ -12,17 +12,24 @@
     padding: 0 20px;
     border-radius: 60px;
     background-color: #f7f7f7;
-    color: #ccc;
     font-size: 28px;
     align-items: center;
     .at-icon {
+      color: #ccc;
       margin-right: 10px;
     }
     &--value {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
       &.ong {
         color: #333333;
         margin-left: 40px;
       }
+    }
+    &--placeholder {
+      color: #ccc;
     }
   }
   & > .at-icon {

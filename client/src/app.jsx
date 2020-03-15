@@ -65,8 +65,9 @@ class App extends Component {
   }
 
   componentDidShow () {
-    // console.log(IS_PRO)
     Taro.cloud.init({
+      // eslint-disable-next-line no-undef
+      env: ENV_ID,
       traceUser: true
     })
   }

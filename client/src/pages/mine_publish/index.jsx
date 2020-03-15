@@ -16,8 +16,8 @@ class Index extends Component {
     super(props)
     this.state = {
       tools: [
-        { key: '1', title: '人找车', image: car },
-        { key: '2', title: '车找人', image: people },
+        { key: '1', title: '找车主', image: car },
+        { key: '2', title: '找乘客', image: people },
       ],
       list: [],
       pagesize: 10,
@@ -61,7 +61,7 @@ class Index extends Component {
       this.setState({
         loading: true
       })
-    } 
+    }
     try {
       const { data } = await Server({
         name: 'get_publish',
@@ -71,9 +71,9 @@ class Index extends Component {
           type,
           ismine: true
         },
-        noloading: true
+        noloading: !!list.length
       })
-      pageno = pageno + 1 
+      pageno = pageno + 1
       this.setState({
         list: list.concat(data),
         loading: false,
@@ -192,7 +192,7 @@ class Index extends Component {
             })
           }
           {
-            loading ? <AtActivityIndicator mode='center' content='加载中...' /> : ''
+            loading && list.length ? <AtActivityIndicator mode='center' content='加载中...' /> : ''
           }
           {
             loadend ? list.length ?
