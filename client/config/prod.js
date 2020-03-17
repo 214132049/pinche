@@ -4,6 +4,7 @@ module.exports = {
   },
   defineConstants: {
     ENV_ID: '"dev-b61475"'
+    // ENV_ID: '"pro-hwuw1"'
   },
   mini: {},
   h5: {

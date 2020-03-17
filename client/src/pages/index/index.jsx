@@ -45,6 +45,17 @@ class Index extends Component {
     })
   }
 
+  onShareAppMessage(res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: 'iDriver拼车信息平台！',
+      path: '/pages/index/index'
+    }
+  }
+
   onReachBottom() {
     this.onGetPublishMessage()
   }
