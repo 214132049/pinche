@@ -65,9 +65,14 @@ class App extends Component {
   }
 
   componentDidShow () {
+    // envVersion: ‘develop’, //开发版
+    // envVersion: ‘trial’, //体验版
+    // envVersion: ‘release’, //正式版
+    // eslint-disable-next-line no-undef
+    const version = __wxConfig.envVersion
+    console.log(version)
     Taro.cloud.init({
-      // eslint-disable-next-line no-undef
-      env: ENV_ID,
+      env: version === 'release' ? 'pro-hwuw1' : 'dev-b61475',
       traceUser: true
     })
   }

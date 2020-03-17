@@ -2,10 +2,6 @@ module.exports = {
   env: {
     NODE_ENV: '"production"'
   },
-  defineConstants: {
-    ENV_ID: '"dev-b61475"'
-    // ENV_ID: '"pro-hwuw1"'
-  },
   mini: {},
   h5: {
     /**
