@@ -27,7 +27,7 @@ class Index extends Component {
   }
 
   config = {
-    navigationBarTitleText: 'e拼车',
+    navigationBarTitleText: 'iDriver',
     onReachBottomDistance: 100,
     enablePullDownRefresh: true
   }

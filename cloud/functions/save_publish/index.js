@@ -71,6 +71,7 @@ exports.main = async (event, context) => {
     })
     if (data.note.trim()) {
       console.log(data.note)
+      //TODO 调用不成功
       await cloud.openapi.customerServiceMessage.send({
         touser: wxContext.OPENID,
         content: data.note

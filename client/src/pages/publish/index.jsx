@@ -99,10 +99,6 @@ class Index extends Component {
     Taro.setNavigationBarTitle({
       title: `发布${findPeople ? '找乘客' : '找车主'}信息`
     })
-    Taro.setNavigationBarColor({
-      frontColor: '#ffffff',
-      backgroundColor: findPeople ? '#fba81e' : '#ff411e'
-    })
   }
 
   componentDidMount () {

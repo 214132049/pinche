@@ -1,4 +1,6 @@
 import getDateDes from '@/utils/date'
+import arrowIcon from '@/assets/images/arrow.png'
+import calendarIcon from '@/assets/images/calendar.png'
 
 export default function (detail, qrcode) {
   let start = detail.start ? detail.start.name : ''
@@ -9,14 +11,14 @@ export default function (detail, qrcode) {
       <view class='header'>
         <view class='header-city'>
           <text class='name'>${start}</text>
-          <text class='iconfont iconfont-arrow' />
+          <image src='${arrowIcon}' class='arrow-icon' />
           <text class='name'>${end}</text>
         </view>
         <View class='header-time'>
           <View class='item'>${detail.time} 出发</View>
-          <View class='item'>
+          <View class='item date'>
             ${getDateDes(detail)}
-            <Text class='at-icon at-icon-calendar' />
+            <image src='${calendarIcon}' class='calendar-icon' />
           </View>
         </View>
       </view>
@@ -35,7 +37,7 @@ export default function (detail, qrcode) {
       color: '#333'
     },
     header: {
-      boxSizing: 'border-box',
+      flexDirection: 'column',
       backgroundColor: '#2577e3',
       color: '#ffffff',
       padding: 10,
@@ -43,6 +45,7 @@ export default function (detail, qrcode) {
       height: 150
     },
     headerCity: {
+      flexDirection: 'row',
       justifyContent: 'center',
       textAlign: 'center',
       alignItems: 'center',
@@ -51,28 +54,31 @@ export default function (detail, qrcode) {
     },
     name: {
       flex: 1,
-      height: 75
-    },
-    iconfontArrow: {
-      width: 80,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
       height: 75,
+    },
+    arrowIcon: {
+      width: 30,
+      height: 30,
       marginRight: 10,
       marginLeft: 10,
-      fontSize: 30,
       color: '#FFFFFF'
     },
     headerTime: {
+      flexDirection: 'column',
       textAlign: 'center',
       marginTop: 5,
       width: 298,
       height: 50
     },
     item: {
-      width: 298,
-      height: 50,
-      lineHeight: 50
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 25,
     },
-    atIcon: {
+    date: {
       width: 15,
       height: 15,
       verticalAlign: 'middle',
@@ -80,17 +86,18 @@ export default function (detail, qrcode) {
       marginLeft: 5
     },
     qrcodeImageBox: {
-      boxSizing: 'border-box',
+      flexDirection: 'column',
+      justifyContent: 'center',
       textAlign: 'center',
       width: 298,
-      height: 180,
+      height: 120,
       paddingBottom: 30,
       paddingTop: 30
     },
     qrcodeImage: {
-      width: 100,
-      height: 100,
-      borderRadius: 100
+      width: 90,
+      height: 90,
+      borderRadius: 90
     },
     qrcodeText: {
       width: 298,

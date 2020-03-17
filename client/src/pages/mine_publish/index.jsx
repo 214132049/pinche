@@ -198,7 +198,7 @@ class Index extends Component {
           {
             loadend ? list.length ?
               <AtDivider className='divider' fontColor='#ccc' content='我是有底线的' /> :
-              <NoData /> : ''
+              <NoData tip='您暂未发布此类信息' /> : ''
           }
         </View>
         <View className='fab-btn' onClick={this.onToPublish}>

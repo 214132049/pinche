@@ -1,7 +1,7 @@
 import Taro, { useShareAppMessage, useEffect, useState, useRouter, useRef } from '@tarojs/taro'
-import { View, Text, Image, Button, Label, CoverView } from '@tarojs/components'
-import { AtDivider, AtIcon, AtButton } from 'taro-ui'
-import wxmlToCanvas from 'wxml-to-canvas'
+import { View, Text, Image, Button, Label } from '@tarojs/components'
+import { AtButton, AtDivider } from 'taro-ui'
+// import wxmlToCanvas from 'wxml-to-canvas'
 import dayjs from 'dayjs'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import Server from '@/utils/server'
@@ -9,7 +9,7 @@ import getDateDes from '@/utils/date'
 import { carSelector } from '@/constants'
 
 import weixin from '@/assets/images/weixin.png'
-import miniCode from '@/assets/images/mini_code.png'
+// import miniCode from '@/assets/images/mini_code.png'
 import call from '@/assets/images/call.png'
 
 import './index.scss'
@@ -196,20 +196,19 @@ export default function Detail() {
               </View>
             </View> : ''
           }
-
         </View>
         {
           !expired ? <View>
-            <AtDivider className='divider' fontColor='#ccc' content='快分享给朋友吧' />
+            <AtDivider className='divider' fontColor='#ccc' content='·' />
             <View className='share-btns'>
               <Button openType='share'>
                 <Image src={weixin} />
                 <View className='text'>分享给好友</View>
               </Button>
-              <Button onClick={createShareImage}>
-                <Image src={miniCode} />
-                <View className='text'>分享二维码</View>
-              </Button>
+              {/*<Button onClick={createShareImage}>*/}
+              {/*  <Image src={miniCode} />*/}
+              {/*  <View className='text'>分享二维码</View>*/}
+              {/*</Button>*/}
               <Button onClick={makePhone.bind(this, detail.moblie)}>
                 <Image src={call} />
                 <View className='text'>联系Ta</View>
@@ -226,16 +225,15 @@ export default function Detail() {
             </View>
           : ''
         }
-        <View
-          className='share-image-box'
-          style={{ left: shareModalOpened ? '0' : '-200%'}}
-        >
-          <View className='share-image-content'>
-            <wxmlToCanvas className='widget' width='298' height='350' ref={qrcodeRef} />
-            <AtButton type='primary' onClick={exportShareImage}>保存到本地</AtButton>
-            <View className='at-icon at-icon-close' onClick={() => toggleShareModal(false)} />
-          </View>
-        </View>
+        {/*<View*/}
+        {/*  className='share-image-box'*/}
+        {/*  style={{ left: shareModalOpened ? '0' : '-200%'}}*/}
+        {/*>*/}
+        {/*  <View className='share-image-content'>*/}
+        {/*    <wxmlToCanvas className='widget' width='298' height='350' ref={qrcodeRef} />*/}
+        {/*    <View className='at-icon at-icon-close' onClick={() => toggleShareModal(false)} />*/}
+        {/*  </View>*/}
+        {/*</View>*/}
       </View>
     )
 }
